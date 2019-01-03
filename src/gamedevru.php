@@ -9,6 +9,9 @@ class ALink
 
   public function rebase($newbase, $oldbase)
   {
+    if ($this->href=="") return;
+    if (strpos($this->href, '#')===0) return;
+
     if (strpos($this->href,"http")===false) {
       $this->href = $newbase . $this->href;
     } else if (strpos($this->href, $oldbase)===0) {
