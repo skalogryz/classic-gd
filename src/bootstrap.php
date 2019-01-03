@@ -66,18 +66,11 @@ function GatherMessages($xpath, $site)
     }
 
     $body = $elem->nextSibling;
-    $cnt = 0;
     while ($body!=null){
-      $cnt++;
-      if ($cnt>10) break;
+
       //echo "tt: ".$body->nodeName."-".$body->textContent."\r\n";
       $xml = $xpath->query($tm_sel_bodyonly, $body);
       $date = $xpath->query($tm_sel_datetime_int, $body); 
-      if ($xml->length>0)  
-        foreach($xml as $e) {
-          $msg->bodyhtml.=$xpath->document->saveXML($e);
-        }
- 
       // дата сообщения
       if ($date->length>0) {
         $msg->datestr=$date[0]->textContent;
@@ -87,8 +80,13 @@ function GatherMessages($xpath, $site)
            $msg->editstr = substr($msg->editstr, 1, strlen($msg->editstr)-2);
            $msg->datestr = substr($msg->datestr, 0, $i-1);
         }
+        $date[0]->parentNode->removeChild($date[0]);
+        $msg->bodyhtml.=$xpath->document->saveXML($body);
         break; // нашли дату - значит сообщение закончилось
+      } else {
+        $msg->bodyhtml.=$xpath->document->saveXML($body);
       }
+      
       $body = $body->nextSibling;
     }
   }
