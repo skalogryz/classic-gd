@@ -20,6 +20,7 @@ require_once("gamedevru.php");
  $tm_sel_datetime  = "./following-sibling::div[1]/p[last()]"; // ссылка (либо текст) уровня юзера, "Пользователь/Учатник/Забанен"
  $tm_sel_bodyelem  = "./following-sibling::div[1]/*[position()<last()]"; // все элемент тела сообщения.
                                                                          // для bootstap приходится исключать последний элемент (в нём дата)
+ $tm_sel_paths     = "(/html/body/div[contains(@class, 'path')]/div)[1]/a"; // ссылки "пути" (внизу страницы). Путь написан дважды, необходимо ограничинть выбором только первого набора
 
  // селекторы для раздела форумов
  $frm_sel_nextforum = "./following-sibling::h2"
@@ -36,7 +37,9 @@ require_once("gamedevru.php");
 // парсим сообщения со страницы 
 function GatherMessages($xpath, $site)
 {
-  global $tm_sel, $tm_sel_messageid, $tm_sel_userlink, $tm_sel_level, $tm_sel_datetime, $tm_body_isheadsibling, $tm_sel_bodyelem;
+  global $tm_sel, $tm_sel_messageid, $tm_sel_userlink,
+     $tm_sel_level, $tm_sel_datetime, $tm_body_isheadsibling, 
+     $tm_sel_bodyelem, $tm_sel_paths;
 
   $msglist = $xpath->query($tm_sel);
   foreach($msglist as $elem) {
@@ -77,6 +80,12 @@ function GatherMessages($xpath, $site)
     foreach($xml as $e) {
       $msg->bodyhtml.=$xpath->document->saveXML($e);
     }
+  }
+
+  $msglist = $xpath->query($tm_sel_paths);
+  foreach($msglist as $elem) {
+    $lnk = $site->addPath();
+    $lnk->fromXML($elem);
   }
 }
 

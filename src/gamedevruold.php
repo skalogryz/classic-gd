@@ -245,6 +245,25 @@ function OutputMainEnd()
    echo '</div><div id="main_add"></div></div>';
 }
 
+function OutputPaths($site)
+{
+  $cnt = 0;
+  echo '<p id="bottompath">';
+  foreach($site->paths as $pth) 
+  {
+    echo "/ ";
+    if ($cnt==0) {
+      echo "<b>";
+      echo $pth->toHTML();
+      echo "</b>";
+    } else   
+      echo $pth->toHTML();
+    echo " ";
+    $cnt++;
+  } 
+  echo '</p>';
+}
+
 
 function OutputSite($site, $type)
 {
@@ -255,6 +274,7 @@ function OutputSite($site, $type)
     OutputPages($site);
     OutputThread($site);
     OutputPages($site);
+    OutputPaths($site);
     OutputMainEnd();
     OutputEnd();
   } else if ($type=="forum") {

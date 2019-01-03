@@ -123,6 +123,7 @@ class GameDev
   public $pages = array();
   public $menus = array();
   public $forums = array();
+  public $paths = array();
   public function addMessage() 
   {
     $msg = new Message();
@@ -166,6 +167,13 @@ class GameDev
      $forum = new Forum();
      array_push($this->forums, $forum);
      return $forum;
+  }
+ 
+  public function addPath()
+  {
+     $path = new ALink();
+     array_push($this->paths, $path);
+     return $path;
   }
 }
 
