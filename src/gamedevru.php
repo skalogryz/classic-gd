@@ -84,6 +84,7 @@ class Forum
   public $level;  // 0 - master, 1 - section, 2 - thread
   public $link;   // имя/ссылка
   public $isComplex = false; // сложная тема или повышенной важности
+  public $isTitle = false;   // заголовок дочерние форумы
   public $replies = "";
   public $lastreplylink;
   public $author = "";

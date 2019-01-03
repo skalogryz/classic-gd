@@ -110,57 +110,106 @@ function OutputThread($site)
   }
 }
 
+function OutputForum2($forums, $i)
+{
+  $even = false;
+  while ($i<sizeof($forums)&&($forums[$i]->level==2)) 
+  {
+    $frm = $forums[$i];
+    if ($frm->isComplex) echo '<tr class="red">';
+    else if ($even) echo '<tr class="sec">';
+    else echo '<tr>';
+    $even = !$even;
+    echo '<td><b>'.$frm->link->toHTML().'</b>';
+    $cnt = 0;
+    if (sizeof($frm->pages)>0) {
+      echo ' [&nbsp;';
+      $lastpg = intval($frm->pages[0]->text)-1;
+      foreach ($frm->pages as $page) {
+        $pg = intval($page->text);
+        if ($pg!=$lastpg+1) echo " &hellip;";
+        $lastpg = $pg;
+        if ($cnt>0) echo " ";
+        $cnt++;
+        echo $page->toHTML();
+      }
+      echo '&nbsp;]';
+    }
+    echo '</td>';
+    echo '<td style="text-align: center;">'.$frm->author.'</td>';
+    echo '<td style="text-align: center;">'.$frm->lastreplyname.'</td>';
+    echo '<td style="text-align: right;">'.$frm->replies.'</td>';
+    echo '<td style="text-align: right;">'.$frm->lastreplylink->toHTML().'</td>';
+    echo '</tr>';
+    $i++;
+  }
+  return $i;
+}
+
+
+function OutputForum1($forums, $i)
+{
+  while ($i<sizeof($forums)&&($forums[$i]->level>=1)) 
+  {
+    $frm = $forums[$i];
+    echo '<table class="r" cellspacing="1"><tbody><tr>';
+    if ($frm->level==1) {
+      echo '<th>'.$frm->link->toHTML().'</th>';
+      $i++;
+    } else {
+      echo '<th></th>';
+    }
+    echo '<th width="120" style="text-align: center;">Автор</th>';
+    echo '<th width="120" style="text-align: center;">Последний</th>';
+    echo '<th width="40" style="text-align: right;">Отв.</th>';
+    echo '<th width="110" style="text-align: right;">Обновление</th>';
+    echo '</tr>';
+
+    $i=OutputForum2($forums, $i);
+    echo '</tbody></table>';
+    echo '<div style="height: 10px"></div>';
+  }
+  return $i;
+}
+
+function OutputForum0($forums, $i)
+{
+  while ($i<sizeof($forums)&&($forums[$i]->level==0)) 
+  {
+    $frm = $forums[$i];
+    $i++;
+    if ($frm->isTitle) {
+      echo '<div class="title">';
+      echo $frm->link->text;
+      echo '</div>';
+      $i=OutputForum1($forums, $i);
+    } else {
+      echo '<div class="docs"><div class="menuco"><h2>';
+      echo $frm->link->toHTML();
+      echo '</h2></div>';
+      $i=OutputForum1($forums, $i);
+      echo '</div>';
+    }   
+  }
+  return $i;
+}
+
 function OutputForum($site)
 {
   $lastlvl = -1;
   $even = false;
-  foreach($site->forums as $frm) 
+
+  $i = 0;
+  while ($i < sizeof($site->forums))
   {
-     if ($frm->level!=$lastlvl) {
-       if ($frm->level==1) {
-          echo '</tbody></table>';
-          echo '<div style="height: 10px"></div>';
-       }
-     }
-     $lastlvl=$frm->level;
-     if ($frm->level==1) {
-        echo '<table class="r" cellspacing="1"><tbody><tr>';
-        echo '<th>'.$frm->link->toHTML().'</th>';
-        echo '<th width="120" style="text-align: center;">Автор</th>';
-        echo '<th width="120" style="text-align: center;">Последний</th>';
-        echo '<th width="40" style="text-align: right;">Отв.</th>';
-        echo '<th width="110" style="text-align: right;">Обновление</th>';
-        echo '</tr>';
-        $even = false;
-     } else if  ($frm->level==2) {
-        if ($frm->isComplex) echo '<tr class="red">';
-        else if ($even) echo '<tr class="sec">';
-        else echo '<tr>';
-        $even = !$even;
-        echo '<td><b>'.$frm->link->toHTML().'</b>';
-        $cnt = 0;
-        if (sizeof($frm->pages)>0) {
-          echo ' [&nbsp;';
-          $lastpg = intval($frm->pages[0]->text)-1;
-          foreach ($frm->pages as $page) {
-            $pg = intval($page->text);
-            if ($pg!=$lastpg+1) echo " &hellip;";
-            $lastpg = $pg;
-            if ($cnt>0) echo " ";
-            $cnt++;
-            echo $page->toHTML();
-          }
-          echo '&nbsp;]';
-        }
-        echo '</td>';
-        echo '<td style="text-align: center;">'.$frm->author.'</td>';
-        echo '<td style="text-align: center;">'.$frm->lastreplyname.'</td>';
-        echo '<td style="text-align: right;">'.$frm->replies.'</td>';
-        echo '<td style="text-align: right;">'.$frm->lastreplylink->toHTML().'</td>';
-        echo '</tr>';
-     }
+    $frm = $site->forums[$i];
+    if ($frm->level==0)
+      $i = OutputForum0($site->forums, $i);
+    else if ($frm->level==1) 
+      $i = OutputForum1($site->forums, $i);
+    else 
+      $i = OutputForum2($site->forums, $i);
   }
-  echo '</tbody></table>';
 }
 
 function OutputPages($site)

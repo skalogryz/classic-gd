@@ -156,7 +156,12 @@ function GatherForum($xpath, $site)
       $f = $site->addForum();
       $f->level=1;
       $f->link->fromXML($xml->firstChild);
-    }else if ($xml->nodeName=="div") {
+    } else if (($xml->nodeName=="div")&&($xml->getAttribute('class')=='title')) {
+      $f = $site->addForum();
+      $f->level=0;
+      $f->isTitle=true;
+      $f->link->text=$xml->textContent;
+    } else if ($xml->nodeName=="div") {
       $cls = $xml->getAttribute("class");
       if ($cls == "pages") { 
         $xml=$xml->nextSibling;
