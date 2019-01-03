@@ -39,7 +39,7 @@ echo '
 
  <div id="footer"> <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/users/?login">Войти</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/members/">Участники</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/top/">Каталог сайтов</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/tags/">Категории</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/news/?adoc=arch">Архив новостей</a></div>
  <div id="bottom">
-   <div>2001—2018 &copy; <b>GameDev.ru — Разработка игр</b></div>
+   <div>2001—2019 &copy; <b>GameDev.ru — Разработка игр</b></div>
    <div id="social"></div>
    <div id="pda"></div>
  </div>
