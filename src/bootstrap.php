@@ -18,6 +18,9 @@ require_once("gamedevru.php");
  $tm_sel_userlink  = "(./ul/li/a)[1]"; // ссылка на юзера 
  $tm_sel_level     = "./ul/li[2]/a|./ul/li[2]"; // ссылка (либо текст) уровня юзера, "Пользователь/Учатник/Забанен"
  $tm_sel_datetime  = "./following-sibling::div[1]/p[last()]"; // ссылка (либо текст) уровня юзера, "Пользователь/Учатник/Забанен"
+ $tm_sel_datetime_int = "./p[contains(@class, 'date') and last()]"; // ссылка (либо текст) уровня юзера, "Пользователь/Учатник/Забанен",
+                                                                    // относительно родительского див-а
+ $tm_sel_bodyonly = "./*[not(local-name()='p' and contains(@class, 'date'))]"; // все компоненты кроме последней даты
  $tm_sel_bodyelem  = "./following-sibling::div[1]/*[position()<last()]"; // все элемент тела сообщения.
                                                                          // для bootstap приходится исключать последний элемент (в нём дата)
  $tm_sel_paths     = "(/html/body/div[contains(@class, 'path')]/div)[1]/a"; // ссылки "пути" (внизу страницы). Путь написан дважды, необходимо ограничинть выбором только первого набора
@@ -39,7 +42,7 @@ function GatherMessages($xpath, $site)
 {
   global $tm_sel, $tm_sel_messageid, $tm_sel_userlink,
      $tm_sel_level, $tm_sel_datetime, $tm_body_isheadsibling, 
-     $tm_sel_bodyelem, $tm_sel_paths;
+     $tm_sel_bodyelem, $tm_sel_paths, $tm_sel_datetime_int, $tm_sel_bodyonly;
 
   $msglist = $xpath->query($tm_sel);
   foreach($msglist as $elem) {
@@ -62,23 +65,31 @@ function GatherMessages($xpath, $site)
       $msg->isComplex = ((strpos($msg->levellink->text, "Участник")===0)||(strpos($msg->levellink->text, "Модератор")===0));
     }
 
-
-    // дата сообщения
-    $xml = $xpath->query($tm_sel_datetime, $elem);
-    if ($xml->length>0) {
-      $msg->datestr=$xml[0]->textContent;
-      $i = strpos($msg->datestr,'(');
-      if (!($i===false)) {
-         $msg->editstr = substr($msg->datestr, $i);
-         $msg->editstr = substr($msg->editstr, 1, strlen($msg->editstr)-2);
-         $msg->datestr = substr($msg->datestr, 0, $i-1);
+    $body = $elem->nextSibling;
+    $cnt = 0;
+    while ($body!=null){
+      $cnt++;
+      if ($cnt>10) break;
+      //echo "tt: ".$body->nodeName."-".$body->textContent."\r\n";
+      $xml = $xpath->query($tm_sel_bodyonly, $body);
+      $date = $xpath->query($tm_sel_datetime_int, $body); 
+      if ($xml->length>0)  
+        foreach($xml as $e) {
+          $msg->bodyhtml.=$xpath->document->saveXML($e);
+        }
+ 
+      // дата сообщения
+      if ($date->length>0) {
+        $msg->datestr=$date[0]->textContent;
+        $i = strpos($msg->datestr,'(');
+        if (!($i===false)) {
+           $msg->editstr = substr($msg->datestr, $i);
+           $msg->editstr = substr($msg->editstr, 1, strlen($msg->editstr)-2);
+           $msg->datestr = substr($msg->datestr, 0, $i-1);
+        }
+        break; // нашли дату - значит сообщение закончилось
       }
-    }
-
-    // сообщение
-    $xml = $xpath->query($tm_sel_bodyelem, $elem);
-    foreach($xml as $e) {
-      $msg->bodyhtml.=$xpath->document->saveXML($e);
+      $body = $body->nextSibling;
     }
   }
 
