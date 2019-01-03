@@ -131,6 +131,7 @@ class GameDev
   public $menus = array();
   public $forums = array();
   public $paths = array();
+  public $isGuest = true; // индикатор анонимного (true) или авторизованного (false) пользователя
   public function addMessage() 
   {
     $msg = new Message();

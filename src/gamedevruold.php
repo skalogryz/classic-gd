@@ -16,7 +16,11 @@ echo '<html>
 </head>
 <body>
 
-<div style="background: #efefef; height:19px"><div id="login" style="float: right;"></div><b>GameDev.ru — Разработка игр</b></div>
+<div style="background: #efefef; height:19px">';
+
+if ($site->isGuest) echo '<div id="login" style="float: right;"></div>';
+
+echo '<b>GameDev.ru — Разработка игр</b></div>
 <div id="header" 
   style="min-height: 92px;"><a id="sitename" href="https://web.archive.org/web/20181229174815/https://gamedev.ru/">GameDev.ru &nbsp;</a><a href="https://web.archive.org/web/20181229174815/https://zavod.games/#jobs">
 <!--

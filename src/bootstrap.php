@@ -7,6 +7,7 @@ require_once("gamedevru.php");
  $common_sel_title = "/html/body/div[contains(@class, 'bound')]/h1";
  $common_sel_pages = "(/html/body/div[contains(@class, 'bound')]/div[contains(@class, 'pages')])[1]/a"
                     ."|(/html/body/div[contains(@class, 'bound')]/div[contains(@class, 'pages')])[1]/span";
+ $common_sel_login  = "//div[contains(@id,'login')]";
  $common_sel_menus  ="/html/body/div[contains(@id,'tool')]/div/div[contains(@id,'menu')]/div/ul/li";
  $common_sel_submenus ="./ul/li";
  $common_sel_menulink = "./a";
@@ -230,10 +231,14 @@ function GatherForum($xpath, $site)
 // нужно передавать формат странички сайта, исходя из его адреса
 function GatherSite($xpath, $site, $type)
 {
-  global $common_sel_title;
+  global $common_sel_title,$common_sel_login;
 
   $xml = $xpath->query($common_sel_title);
   if ($xml->length>0)  $site->title = $xml[0]->textContent;
+
+  $xml = $xpath->query($common_sel_login);
+  $site->isGuest = ($xml->length>0);
+
   GatherPages($xpath, $site);
   GatherMenus($xpath, $site);
  
