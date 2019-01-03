@@ -9,7 +9,9 @@ class ALink
 
   public function rebase($newbase, $oldbase)
   {
-    if (strpos($this->href, $oldbase)===0) {
+    if (strpos($this->href,"http")===false) {
+      $this->href = $newbase . $this->href;
+    } else if (strpos($this->href, $oldbase)===0) {
       $this->href = substr_replace($this->href, $newbase, 0, strlen($oldbase));
     }  
   }
@@ -43,6 +45,7 @@ class Message
    public $isComplex = false;  // сообщение от гуру 
    public $levellink;          // уровень пользователя
    public $datestr = "";       // дата, когда сообщение было сделано
+   public $timestr = "";       // дата, когда сообщение было сделано
    public $editstr = "";       // последняя правка 
    public $bodyhtml = "";      // html тела сообщения
    public $id = "";            // id сообщения
@@ -106,6 +109,7 @@ class Forum
   function rebase($newbase, $oldbase)
   {  
     $this->link->rebase($newbase, $oldbase);
+    $this->lastreplylink->rebase($newbase, $oldbase);
     foreach($this->pages as $page)
       $page->rebase($newbase, $oldbase);
   }
@@ -153,6 +157,9 @@ class GameDev
       $mnu->rebase($newbase, $oldbase);
     foreach ($this->forums as $forum)
       $forum->rebase($newbase, $oldbase);
+    foreach ($this->paths as $link) { 
+      $link->rebase($newbase, $oldbase);
+    }
   }
 
   public function addMenu()

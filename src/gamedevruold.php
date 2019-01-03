@@ -98,7 +98,7 @@ function OutputThread($site)
     echo "<b>".$msg->userlink->toHTML()."</b></th>";
     echo '<td class="level">'.$msg->levellink->toHTML()."</td>";
     echo '<td class="center">www</td>';
-    echo '<td style="width: 100px">'.$msg->datestr."</td><td></td>";
+    echo '<td style="width: 100px">'.$msg->datestr."</td><td>".$msg->timestr."</td>";
     echo "<td><i>".$msg->msglink->toHTML()."</i></td>";
     echo "</tr></tbody></table>";
     echo '<div class="block">'.$msg->bodyhtml;
