@@ -30,6 +30,11 @@ function callHttp($url)
   //echo "will call: $url\r\n";
 
   $page = callHttp($url);
+  if (substr($_SERVER["SCRIPT_URL"],-3) == '.js') {
+    echo $page;
+    die;
+  } 
+
   $mode = "";
   if (strpos($_SERVER["SCRIPT_URL"], '/forum')) 
     $mode = "forum";
@@ -40,15 +45,16 @@ function callHttp($url)
   libxml_use_internal_errors(true);
   $doc->loadHTML($page);
   libxml_clear_errors();
-
+  
   $xpath = new DOMXpath($doc);
   $gd = new GameDev();
   $basepath = $_SERVER["REQUEST_SCHEME"]."://".$_SERVER["HTTP_HOST"].$g_proxypath;
   $gd->basepath = $basepath."/"; // this is used NOT to create a stand-alone host, but rather a directory in existing one
-
+  
   GatherSite($xpath, $gd, $mode);
   $gd->rebase($basepath);
   OutputSite($gd, $mode);
+
 //  if /gamedev.ru/flame/forum/
   
 ?>
