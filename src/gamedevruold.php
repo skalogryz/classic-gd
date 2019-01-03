@@ -12,6 +12,7 @@ function OutputBegin($site)
 echo '<html>
 <head>
 <link href="'.$site->basepath.'main.css" rel="stylesheet" type="text/css"/>
+<script type="application/javascript" src="'.$site->basepath.'_js/skif.js"></script>
 </head>
 <body>
 
