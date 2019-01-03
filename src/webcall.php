@@ -37,7 +37,9 @@ function callHttp($url)
     $mode = "thread";
   
   $doc = new DOMDocument;
+  libxml_use_internal_errors(true);
   $doc->loadHTML($page);
+  libxml_clear_errors();
 
   $xpath = new DOMXpath($doc);
   $gd = new GameDev();
