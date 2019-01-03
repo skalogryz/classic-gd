@@ -36,12 +36,59 @@ echo '<b>GameDev.ru — Разработка игр</b></div>
 
 }
 
+function OutputEdit($site)
+{
+
+  $userlink = "";
+echo '
+<div>
+<div id="preview"></div>
+<h2>Ваш ответ, <b>'.$userlink.'</b>:</h2>
+
+<script language="JavaScript">
+<!--
+function verifySubmitFields(form)
+{
+	if (document.postform.text.value == ""){
+	alert("Вы не ввели значение для Сообщение");
+	return false;}
+	if (document.postform.text.value.length > 10000){
+	alert("Длина поля Сообщение не должна превышать 10000 символов!");
+	return false;}
+
+	postform._gdr_post.disabled = true;
+	return true;
+}
+-->
+</script>
+<form name="postform" method="POST" action="#preview" onsubmit="return verifySubmitFields(this)">
+
+<p><b>Сообщение:</b> Максимум 10000 символов. Отправить: Ctrl+Shift+Enter</p>
+<p><span id="areatags"></span>
+<textarea class="gdr" name="text" cols="68" rows="18" onkeydown="key_pressed(event);"></textarea></p>
+<p><label for="subscribe"><input type="checkbox" id="subscribe" name="subscribe">Получать ответы на e-mail</label>
+
+<input type="hidden" name="action" value="autopost">
+<input type="hidden" name="huyita" value="486ba7976a318e2c">
+</p><p class="r"><input id="_gdr_preview" name="_gdr_preview" type="submit" value="Предпросмотр">
+<input id="_gdr_post" name="_gdr_post" type="submit" class="blue" value="Отправить"></p>
+</form>
+</div>
+';
+}
+
 function OutputEnd()
 {
+
 echo '
+
     <div class="clear"></div>
   </div>
+';
 
+  
+
+echo'
  <div id="footer"> <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/users/?login">Войти</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/members/">Участники</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/top/">Каталог сайтов</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/tags/">Категории</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/news/?adoc=arch">Архив новостей</a></div>
  <div id="bottom">
    <div>2001—2019 &copy; <b>GameDev.ru — Разработка игр</b></div>
@@ -245,9 +292,13 @@ function OutputMainStart($title)
    <div style="height: 18px; text-align: right; padding: 5px;"><span style="padding: 5px;"></span></div>'; // "padding is seen in a Thread
 }
 
-function OutputMainEnd()
+function OutputMainEnd($site, $editable)
 {
-   echo '</div><div id="main_add"></div></div>';
+   echo '</div><div id="main_add">';
+
+   if ((!$site->isGuest)&&$editable) OutputEdit($site);
+ 
+   echo '</div></div>';
 }
 
 function OutputPaths($site)
@@ -280,7 +331,7 @@ function OutputSite($site, $type)
     OutputThread($site);
     OutputPages($site);
     OutputPaths($site);
-    OutputMainEnd();
+    OutputMainEnd($site, true);
     OutputEnd();
   } else if ($type=="forum") {
     OutputBegin($site);
@@ -289,7 +340,7 @@ function OutputSite($site, $type)
     OutputPages($site);
     OutputForum($site);
     OutputPages($site);
-    OutputMainEnd();
+    OutputMainEnd($site, true);
     OutputEnd();
   } else {
     OutputBegin($site);
@@ -297,7 +348,7 @@ function OutputSite($site, $type)
     OutputMainStart($site->title);
     OutputPages($site);
     OutputPages($site);
-    OutputMainEnd();
+    OutputMainEnd($site, true);
     OutputEnd();
   }
 }
