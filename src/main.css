@@ -6,7 +6,7 @@
 
 
 
-body {background: #E7EDF3 url('/web/20181208114103im_/https://gamedev.ru/_img/noise.png'); margin-top: 0; margin-bottom: 0; margin-left: auto; margin-right: auto; padding: 2px;}
+body {background: #E7EDF3 url('https://gamedev.ru/_img/noise.png'); margin-top: 0; margin-bottom: 0; margin-left: auto; margin-right: auto; padding: 2px;}
 
 div {color: #000000; font-family: verdana, arial, sans-serif; font-size: 12px; padding: 0px; margin: 0px}
 
@@ -196,11 +196,11 @@ a.green:hover {	background-image: linear-gradient(#00cc00, #00aa00);}
 
 div.social {background: #e8e8e8; border: 2px solid #c5d5f0; padding: 3px; text-align: left;}
 #social a {display: inline-block; text-decoration: none; width: 32px; height: 32px; margin-top: 8px;}
-a.vk {background-image: url('/web/20181208114103im_/https://gamedev.ru/_img/vk.svg');}
-a.facebook {background-image: url('/web/20181208114103im_/https://gamedev.ru/_img/facebook.svg');}
-a.twitter {background-image: url('/web/20181208114103im_/https://gamedev.ru/_img/twitter.svg');}
-a.googleplus {background-image: url('/web/20181208114103im_/https://gamedev.ru/_img/googleplus.svg');}
-a.livejournal {background-image: url('/web/20181208114103im_/https://gamedev.ru/_img/livejournal.svg');}
+a.vk {background-image: url('https://gamedev.ru/_img/vk.svg');}
+a.facebook {background-image: url('https://gamedev.ru/_img/facebook.svg');}
+a.twitter {background-image: url('https://gamedev.ru/_img/twitter.svg');}
+a.googleplus {background-image: url('https://gamedev.ru/_img/googleplus.svg');}
+a.livejournal {background-image: url('https://gamedev.ru/_img/livejournal.svg');}
 
 .search { background-color: #efefef; float: right; height: 16px; border: 1px solid #e7e7e7; border-top-color: #c7c7c7; border-left-color: #c7c7c7; width: 50px;  max-width: 100%; padding: 0px; margin: 0px; border-radius: 2px; transition: width 0.2s, background-color 1s; -webkit-transition: width 0.2s, background-color 1s;}
 .search input { border: 0 none;  height: 14px; padding: 0 0 0 3px;  margin: 0px;  background: none;  outline: 0; -webkit-tap-highlight-color: rgba(0,0,0,0); width: 100%; color: #808080; }
