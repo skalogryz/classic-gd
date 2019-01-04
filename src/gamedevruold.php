@@ -12,7 +12,7 @@ function OutputBegin($site)
 echo '<html>
 <head>
 <link href="'.$site->basepath.'main.css" rel="stylesheet" type="text/css"/>
-<script type="application/javascript" src="'.$site->basepath.'_js/skif.js"></script>
+<script type="application/javascript" src="'.$site->basepath.'skif.js"></script>
 </head>
 <body>
 
@@ -98,7 +98,10 @@ echo'
  </div>
 
  <div class="seo"></div>
-
+<script type="application/javascript"><!--
+skif.run();
+//-->
+</script>
 </body>
 </html>';
 }
