@@ -29,10 +29,6 @@ function callHttp($url, $method, $baseurl)
   }
 
   $context = stream_context_create($opts);
-  if ($ispost) {
-    echo "i will call: $url\r\n";
-    die;
-  }
   $res = file_get_contents($url, false, $context);
 
   if ($ispost) {
