@@ -4,7 +4,7 @@
   require_once("gamedevru.php");
   require_once("gamedevruold.php");
 
-function callHttp($url, $method, $baseurl)
+function callHttp($url, $method, $baseurl, $oldbase)
 {
   $method = strtoupper($method);
   $cookie = "";
@@ -41,6 +41,7 @@ function callHttp($url, $method, $baseurl)
 
   if ($ispost) {
     $isredirect = false;
+    $redirpath = "";
 
     foreach($http_response_header as $h) {
       if (!(strpos($h ,"Set-Cookie:")===false)) {
@@ -64,11 +65,12 @@ function callHttp($url, $method, $baseurl)
         }
       } else if (!(strpos($h ,"Location:")===false)) {
         $isredirect = true;
+        $redirpath = trim(str_replace("Location:", "", $h));
       }
     }
     if ($isredirect) {
       //todo: rebase
-      header("Location: ".$baseurl, true, 302); 
+      header("Location: ".str_replace( $oldbase, $baseurl, $redirpath ) , true, 302); 
       die(); // redirect and bail-out
     }
   }
@@ -82,6 +84,14 @@ function JoinUrls($a, $b)
     if (($b[0]=="/") && ($b[0]==$a[strlen($a)-1])) 
       return $a.substr($b, 1);
   return $a.$b;
+}
+
+function RemoveSlash($a)
+{
+  if (($a!="")&&($a[strlen($a)-1]=="/")) 
+    return substr($a, 0, strlen($a)-1);
+  else
+    return $a;
 }
 
 
@@ -102,7 +112,7 @@ function JoinUrls($a, $b)
   //  $url = $g_truesite.$url;
   //}
 
-  $page = callHttp($url, $_SERVER["REQUEST_METHOD"], $basepath);
+  $page = callHttp($url, $_SERVER["REQUEST_METHOD"], RemoveSlash($basepath), RemoveSlash($g_truesite));
 
   $mode = "";
   if (strpos($_SERVER["SCRIPT_URL"], '/forum')) 
