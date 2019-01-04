@@ -38,7 +38,7 @@ function callHttp($url, $method, $baseurl)
       if (!(strpos($h ,"Set-Cookie:")===false)) {
         $s = str_replace("Set-Cookie:", "", $h);
         $s = trim($s);
-        $arr = explode(";",$s,);
+        $arr = explode(";",$s);
         foreach($arr as $pair) {
           $v = explode("=",trim($pair));
           $nm = ""; $vl ="";
