@@ -92,7 +92,7 @@ function GatherMessages($xpath, $site)
         }
         $i = strpos($msg->datestr,',');
         $msg->timestr = substr($msg->datestr, $i+1);
-        $msg->datestr = substr($msg->datestr, 0, $i-1);
+        $msg->datestr = substr($msg->datestr, 0, $i);
         $date[0]->parentNode->removeChild($date[0]);
         $msg->bodyhtml.=$xpath->document->saveXML($body);
         break; // нашли дату - значит сообщение закончилось
