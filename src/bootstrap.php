@@ -29,6 +29,7 @@ require_once("gamedevru.php");
  $tm_sel_bodyelem  = "./following-sibling::div[1]/*[position()<last()]"; // все элемент тела сообщения.
                                                                          // для bootstap приходится исключать последний элемент (в нём дата)
  $tm_sel_paths     = "(/html/body/div[contains(@class, 'path')]/div)[1]/a"; // ссылки "пути" (внизу страницы). Путь написан дважды, необходимо ограничинть выбором только первого набора
+ $tm_sel_quotenick = ".//div[contains(@class, 'fquote')]";
 
  // селекторы для раздела форумов
  $frm_sel_nextforum = "./following-sibling::h2"
@@ -47,7 +48,8 @@ function GatherMessages($xpath, $site)
 {
   global $tm_sel, $tm_sel_messageid, $tm_sel_userlink,
      $tm_sel_level, $tm_sel_datetime, $tm_body_isheadsibling, 
-     $tm_sel_bodyelem, $tm_sel_paths, $tm_sel_datetime_int, $tm_sel_bodyonly;
+     $tm_sel_bodyelem, $tm_sel_paths, $tm_sel_datetime_int, $tm_sel_bodyonly,
+     $tm_sel_quotenick;
 
   $msglist = $xpath->query($tm_sel);
   foreach($msglist as $elem) {
@@ -62,6 +64,9 @@ function GatherMessages($xpath, $site)
     // message link
     $xml = $xpath->query($tm_sel_messageid, $elem);
     if ($xml->length>0) $msg->msglink->fromXML($xml[0]); 
+
+    $xml = $xpath->query($tm_sel_quotenick, $elem);
+    if ($xml->length>0) $msg->quotenick=$xml[0]->getAttribute('data-nick');
 
     //level
     $xml = $xpath->query($tm_sel_level, $elem);

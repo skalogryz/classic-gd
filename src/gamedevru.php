@@ -52,6 +52,7 @@ class Message
    public $editstr = "";       // последняя правка 
    public $bodyhtml = "";      // html тела сообщения
    public $id = "";            // id сообщения
+   public $quotenick;          // имя ника для цитирования
    function __construct()
    {
       $this->msglink = new ALink();
