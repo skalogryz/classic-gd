@@ -98,8 +98,14 @@ echo'
  </div>
 
  <div class="seo"></div>
-<script type="application/javascript"><!--
-skif.run();
+<script type="application/javascript"><!--';
+
+if ($site->basepath!="") 
+echo '
+skif.domain = "'.$site->basepath.'";
+';
+
+echo ' skif.run();
 //-->
 </script>
 </body>
