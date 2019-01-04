@@ -108,10 +108,10 @@ function GatherMessages($xpath, $site)
         $msg->timestr = substr($msg->datestr, $i+1);
         $msg->datestr = substr($msg->datestr, 0, $i);
         $date[0]->parentNode->removeChild($date[0]);
-        $msg->bodyhtml.=$xpath->document->saveXML($body);
+        $msg->bodyhtml.=$xpath->document->saveHTML($body);
         break; // нашли дату - значит сообщение закончилось
       } else {
-        $msg->bodyhtml.=$xpath->document->saveXML($body);
+        $msg->bodyhtml.=$xpath->document->saveHTML($body);
       }
       
       $body = $body->nextSibling;
@@ -175,7 +175,7 @@ function GatherEdit($xpath, $site)
     $xend = $end[0];
     while (($x!=null)&&(!$x->isSameNode($xend)))
     {
-      $site->previewhtml .= $xpath->document->saveXML($x);
+      $site->previewhtml .= $xpath->document->saveHTML($x);
       $x = $x->nextSibling;
     }
   }
