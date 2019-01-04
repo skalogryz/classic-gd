@@ -21,7 +21,15 @@ function callHttp($url, $method, $baseurl)
   $ispost = $method=='POST';
 
   if ($ispost) {
-    $opts['http']['content']=http_build_query($_POST);
+    $post = array();
+
+    foreach($_POST as $key=>$value) {
+      // gamedev, doesn't support utf8 as input chars
+      // converting to cp1251
+      $post[$key]=iconv("UTF-8", "CP1251//IGNORE", $value);
+    }
+
+    $opts['http']['content']=http_build_query($post);
     $hdr=$opts['http']['header'];
     if ($hdr!="") $hdr.="\r\n";
     $hdr.="Content-type: application/x-www-form-urlencoded\r\n";  
