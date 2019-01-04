@@ -11,7 +11,11 @@ require_once("gamedevru.php");
  $common_sel_menus  ="/html/body/div[contains(@id,'tool')]/div/div[contains(@id,'menu')]/div/ul/li";
  $common_sel_submenus ="./ul/li";
  $common_sel_menulink = "./a";
-  
+
+ $common_sel_edituserlink = "//div[contains(@id,'preview')]/following-sibling::h2//a";
+ $common_sel_previewstart = "//div[contains(@id,'preview')]"; // div, за которым начинается preview
+ $common_sel_previewend = "//div[contains(@id,'preview')]/following-sibling::h2";  // div, перед которым preview кончается
+ $common_edittext = "//textarea[contains(@class,'gdr')]";
 
  // xpath для сообщений
  $tm_sel = "/html/body/div[contains(@class, 'head')]"; // тэг, указывающий на присутствие 
@@ -137,10 +141,32 @@ function GatherMenus($xpath, $site)
 }
 
 
+function GatherEdit($xpath, $site)
+{
+  global $common_sel_previewstart, $common_sel_previewend, $common_edittext;
+  // внимание. возможное в будущем это поменяется 
+  $st = $xpath->query($common_sel_previewstart);
+  $end = $xpath->query($common_sel_previewend);
+
+  if (($st->length>0)&&($end->length>0)) {
+    $x = $st[0]->nextSibling;
+    $xend = $end[0];
+    while (($x!=null)&&(!$x->isSameNode($xend)))
+    {
+      $site->previewhtml .= $xpath->document->saveXML($x);
+      $x = $x->nextSibling;
+    }
+  }
+
+  $st = $xpath->query($common_edittext);
+  if ($st->length>0) $site->edittext = $st[0]->textContent;
+}
+
 // парсим страницу треда обсуждений 
 function GatherThread($xpath, $site)
 {
-   GatherMessages($xpath, $site);
+  GatherMessages($xpath, $site);
+  GatherEdit($xpath, $site);
 }
 
 function GatherForum($xpath, $site)
@@ -231,13 +257,16 @@ function GatherForum($xpath, $site)
 // нужно передавать формат странички сайта, исходя из его адреса
 function GatherSite($xpath, $site, $type)
 {
-  global $common_sel_title,$common_sel_login;
+  global $common_sel_title,$common_sel_login,$common_sel_edituserlink;
 
   $xml = $xpath->query($common_sel_title);
   if ($xml->length>0)  $site->title = $xml[0]->textContent;
 
   $xml = $xpath->query($common_sel_login);
   $site->isGuest = ($xml->length>0);
+
+  $xml = $xpath->query($common_sel_edituserlink);
+  if ($xml->length>0) $site->userlink->fromXML($xml[0]);
 
   GatherPages($xpath, $site);
   GatherMenus($xpath, $site);

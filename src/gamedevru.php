@@ -135,6 +135,8 @@ class GameDev
   public $paths = array();
   public $isGuest = true; // индикатор анонимного (true) или авторизованного (false) пользователя
   public $userlink;
+  public $previewhtml = "";
+  public $edittext="";
 
   function __construct()
   {

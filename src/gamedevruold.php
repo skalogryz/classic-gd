@@ -40,11 +40,10 @@ echo '<a id="sitename" href="'.$site->mainlink->href.'">'.$site->mainlink->text.
 function OutputEdit($site)
 {
 
-  $userlink = "";
 echo '
 <div>
-<div id="preview"></div>
-<h2>Ваш ответ, <b>'.$userlink.'</b>:</h2>
+<div id="preview">'.$site->previewhtml.'</div>
+<h2>Ваш ответ, <b>'.$site->userlink->toHTML().'</b>:</h2>
 
 <script language="JavaScript">
 <!--
@@ -66,7 +65,7 @@ function verifySubmitFields(form)
 
 <p><b>Сообщение:</b> Максимум 10000 символов. Отправить: Ctrl+Shift+Enter</p>
 <p><span id="areatags"></span>
-<textarea class="gdr" name="text" cols="68" rows="18" onkeydown="key_pressed(event);"></textarea></p>
+<textarea class="gdr" name="text" cols="68" rows="18" onkeydown="key_pressed(event);">'.$site->edittext.'</textarea></p>
 <p><label for="subscribe"><input type="checkbox" id="subscribe" name="subscribe">Получать ответы на e-mail</label>
 
 <input type="hidden" name="action" value="autopost">
