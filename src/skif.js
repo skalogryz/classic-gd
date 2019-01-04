@@ -328,6 +328,7 @@ function Core_AddForumQuotes() {
 		var el = elems[i];
 		if (el.className == 'fquote') {
 			skif.addEvent(el, 'click', ins_quote, true);
+ 			el.addEventListener("mousedown", skif.storeQuote, true);
 			if (skif.isTouch)
 				el.addEventListener("touchstart", skif.storeQuote, true);
 		}
@@ -495,7 +496,7 @@ var skif = {
 	},
 
 	storeQuote: function(event) {
-		this.storedQuote = this.getSelText();
+		skif.storedQuote = skif.getSelText();
 	},
 
 	HTMLfn: function(el, fn) {
