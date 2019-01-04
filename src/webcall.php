@@ -29,6 +29,10 @@ function callHttp($url, $method, $baseurl)
   }
 
   $context = stream_context_create($opts);
+  if ($ispost) {
+    echo "i will call: $url\r\n";
+    die;
+  }
   $res = file_get_contents($url, false, $context);
 
   if ($ispost) {
@@ -68,20 +72,31 @@ function callHttp($url, $method, $baseurl)
   return $res;
 }
 
+function JoinUrls($a, $b)
+{
+  if (($a!="") && ($b!="")) 
+    if (($b[0]=="/") && ($b[0]==$a[strlen($a)-1])) 
+      return $a.substr($b, 1);
+  return $a.$b;
+}
+
+
   $g_truesite = "https://gamedev.ru/";
   $g_proxypath = "/gamedev.ru";
 
   $basepath = $_SERVER["REQUEST_SCHEME"]."://".$_SERVER["HTTP_HOST"].$g_proxypath;
 
   $url = $_SERVER["REQUEST_URI"];
+
   // todo: cleanup the mess! :(
-  if ($_SERVER["REQUEST_METHOD"] != 'POST') {
+  //if ($_SERVER["REQUEST_METHOD"] != 'POST') {
+  
     $url = substr_replace($url, "", 0, strlen($g_proxypath));
-    $url = $g_truesite.$url;
-  } else {
-    if (strpos($url, "/")==0) $url=substr($url, 1);
-    $url = $g_truesite.$url;
-  }
+    $url = JoinUrls($g_truesite,$url);
+  //} else {
+  //  if (strpos($url, "/")==0) $url=substr($url, 1);
+  //  $url = $g_truesite.$url;
+  //}
 
   $page = callHttp($url, $_SERVER["REQUEST_METHOD"], $basepath);
 
