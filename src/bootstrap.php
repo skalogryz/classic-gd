@@ -25,6 +25,10 @@ require_once("gamedevru.php");
  $tm_sel_datetime  = "./following-sibling::div[1]/p[last()]"; // ссылка (либо текст) уровня юзера, "Пользователь/Учатник/Забанен"
  $tm_sel_datetime_int = "./p[contains(@class, 'date') and last()]"; // ссылка (либо текст) уровня юзера, "Пользователь/Учатник/Забанен",
                                                                     // относительно родительского див-а
+
+ $tm_sel_editlink    = ".//a[contains(., 'Редакт')]"; // ссылка на юзера 
+ $tm_sel_deletelink  = ".//a[contains(., 'Удалить')]"; // ссылка на юзера 
+
  $tm_sel_bodyonly = "./*[not(local-name()='p' and contains(@class, 'date'))]"; // все компоненты кроме последней даты
  $tm_sel_bodyelem  = "./following-sibling::div[1]/*[position()<last()]"; // все элемент тела сообщения.
                                                                          // для bootstap приходится исключать последний элемент (в нём дата)
@@ -49,7 +53,10 @@ function GatherMessages($xpath, $site)
   global $tm_sel, $tm_sel_messageid, $tm_sel_userlink,
      $tm_sel_level, $tm_sel_datetime, $tm_body_isheadsibling, 
      $tm_sel_bodyelem, $tm_sel_paths, $tm_sel_datetime_int, $tm_sel_bodyonly,
-     $tm_sel_quotenick;
+     $tm_sel_quotenick,
+     $tm_sel_editlink,
+     $tm_sel_deletelink  
+  ;
 
   $msglist = $xpath->query($tm_sel);
   foreach($msglist as $elem) {
@@ -74,6 +81,13 @@ function GatherMessages($xpath, $site)
       $msg->levellink->fromXML($xml[0]); 
       $msg->isComplex = ((strpos($msg->levellink->text, "Участник")===0)||(strpos($msg->levellink->text, "Модератор")===0));
     }
+
+    $xml = $xpath->query($tm_sel_editlink, $elem);
+    if ($xml->length>0) $msg->editlink->fromXML($xml[0]); 
+
+    $xml = $xpath->query($tm_sel_deletelink, $elem);
+    if ($xml->length>0) $msg->deletelink->fromXML($xml[0]); 
+
 
     $body = $elem->nextSibling;
     while ($body!=null){

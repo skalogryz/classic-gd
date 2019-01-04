@@ -53,11 +53,23 @@ class Message
    public $bodyhtml = "";      // html тела сообщения
    public $id = "";            // id сообщения
    public $quotenick;          // имя ника для цитирования
+   public $editlink;
+   public $deletelink;
    function __construct()
    {
       $this->msglink = new ALink();
       $this->userlink = new ALink();
       $this->levellink = new ALink();
+      $this->editlink = new ALink();
+      $this->deletelink = new ALink();
+   }
+   function rebase($newbase, $oldbase)
+   {
+      $this->msglink->rebase($newbase, $oldbase);
+      $this->userlink->rebase($newbase, $oldbase);
+      $this->levellink->rebase($newbase, $oldbase);
+      $this->editlink->rebase($newbase, $oldbase);
+      $this->deletelink->rebase($newbase, $oldbase);
    }
 }
 
@@ -163,14 +175,13 @@ class GameDev
 
   public function rebase($newbase, $oldbase = "https://gamedev.ru")
   { 
-    foreach ($this->pages as $link) { 
+    foreach ($this->pages as $link) 
+    { 
       $link->rebase($newbase, $oldbase);
     }
     foreach ($this->messages as $msg) 
     {
-      $msg->msglink->rebase($newbase, $oldbase);
-      $msg->userlink->rebase($newbase, $oldbase);
-      $msg->levellink->rebase($newbase, $oldbase);
+      $msg->rebase($newbase, $oldbase);
     }
     foreach ($this->menus as $mnu)
       $mnu->rebase($newbase, $oldbase);

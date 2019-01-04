@@ -159,6 +159,19 @@ function OutputThread($site)
     echo "<b>".$msg->userlink->toHTML()."</b></th>";
     echo '<td class="level">'.$msg->levellink->toHTML()."</td>";
     echo '<td class="center">www</td>';
+    if ($msg->editlink->href!="")
+    {
+      echo '<td class="center">'
+          .'<a style="cursor: pointer" href="'.$msg->editlink->href.'" title="'.$msg->editlink->title.'">Правка</a>'
+          .'</td>';
+    }
+    if ($msg->deletelink->href!="")
+    {
+      echo '<td class="center">'
+          .'<a style="cursor: pointer" href="'.$msg->deletelink->href.'" title="'.$msg->deletelink->title.'">Удалить</a>'
+          .'</td>';
+    }
+
     if ($msg->quotenick!="")
     {
       echo '<td class="center">'
