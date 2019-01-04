@@ -350,7 +350,7 @@ function OutputSite($site, $type)
     OutputPages($site);
     OutputForum($site);
     OutputPages($site);
-    OutputMainEnd($site, true);
+    OutputMainEnd($site, false);
     OutputEnd($site);
   } else {
     OutputBegin($site);
@@ -358,7 +358,7 @@ function OutputSite($site, $type)
     OutputMainStart($site->title);
     OutputPages($site);
     OutputPages($site);
-    OutputMainEnd($site, true);
+    OutputMainEnd($site, false);
     OutputEnd($site);
   }
 }
