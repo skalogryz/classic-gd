@@ -121,9 +121,11 @@ class Forum
 
 class GameDev
 {
+  public $mainlink;
+  public $slogan = "GameDev.ru — Разработка игр";
+
   public $basepath = ""; // должен заканчиваться на слэш, если не пустой.
                          // пусть добавляется к ресурсам (main.css)
-
 
   public $title = "";
   public $messages = array();
@@ -132,6 +134,16 @@ class GameDev
   public $forums = array();
   public $paths = array();
   public $isGuest = true; // индикатор анонимного (true) или авторизованного (false) пользователя
+  public $userlink;
+
+  function __construct()
+  {
+    $this->mainlink = new ALink();
+    $this->mainlink->text = "GameDev.ru";
+    $this->mainlink->href = "http://gamedev.ru";
+    $this->userlink = new ALink();
+  }
+
   public function addMessage() 
   {
     $msg = new Message();
