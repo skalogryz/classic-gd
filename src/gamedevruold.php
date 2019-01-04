@@ -20,16 +20,17 @@ echo '<html>
 
 if ($site->isGuest) echo '<div id="login" style="float: right;"></div>';
 
-echo '<b>GameDev.ru — Разработка игр</b></div>
-<div id="header" 
-  style="min-height: 92px;"><a id="sitename" href="https://web.archive.org/web/20181229174815/https://gamedev.ru/">GameDev.ru &nbsp;</a><a href="https://web.archive.org/web/20181229174815/https://zavod.games/#jobs">
+echo '<b>'.$site->slogan.'</b></div>
+<div id="header" style="min-height: 92px;">';
+echo '<a id="sitename" href="'.$site->mainlink->href.'">'.$site->mainlink->text.' &nbsp;</a>
 <!--
+<a href="https://zavod.games/#jobs">
 <img align="right" src="https://web.archive.org/web/20181229174815im_/https://gamedev.ru/files/images/zavodgames.gif"/></a>
 -->
 </div>
 
  <div id="path"><div id="search" style="float: right;"></div>
- <b>GameDev.ru — Разработка игр</b> [<a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/forum/">Форум</a> / <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/?info">Инфо</a>]
+ <b>'.$site->slogan.'</b> [<a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/forum/">Форум</a> / <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/?info">Инфо</a>]
  </div>
 
  <div id="container">';
@@ -77,7 +78,7 @@ function verifySubmitFields(form)
 ';
 }
 
-function OutputEnd()
+function OutputEnd($site)
 {
 
 echo '
@@ -91,7 +92,7 @@ echo '
 echo'
  <div id="footer"> <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/users/?login">Войти</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/members/">Участники</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/top/">Каталог сайтов</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/tags/">Категории</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/news/?adoc=arch">Архив новостей</a></div>
  <div id="bottom">
-   <div>2001—2019 &copy; <b>GameDev.ru — Разработка игр</b></div>
+   <div>2001—2019 &copy; <b>'.$site->slogan.'</b></div>
    <div id="social"></div>
    <div id="pda"></div>
  </div>
@@ -332,7 +333,7 @@ function OutputSite($site, $type)
     OutputPages($site);
     OutputPaths($site);
     OutputMainEnd($site, true);
-    OutputEnd();
+    OutputEnd($site);
   } else if ($type=="forum") {
     OutputBegin($site);
     OutputLeft($site);
@@ -341,7 +342,7 @@ function OutputSite($site, $type)
     OutputForum($site);
     OutputPages($site);
     OutputMainEnd($site, true);
-    OutputEnd();
+    OutputEnd($site);
   } else {
     OutputBegin($site);
     OutputLeft($site);
@@ -349,7 +350,7 @@ function OutputSite($site, $type)
     OutputPages($site);
     OutputPages($site);
     OutputMainEnd($site, true);
-    OutputEnd();
+    OutputEnd($site);
   }
 }
 
