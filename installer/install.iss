@@ -51,6 +51,8 @@ Source: "{#ClassicGDSrcDir}\*"; DestDir: "{app}\src"; Flags: ignoreversion
 Name: "{app}\apache\logs"
 
 [Icons]
+Name: "{group}\Classic Gamedev.ru"; Filename: "http://localhost:8088/gamedev.ru"
+Name: "{group}\Apache Monitor"; Filename: "{app}\apache\bin\ApacheMonitor.exe"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
