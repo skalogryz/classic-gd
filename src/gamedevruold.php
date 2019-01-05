@@ -26,12 +26,12 @@ echo '<b>'.$site->slogan.'</b></div>
 echo '<a id="sitename" href="'.$site->mainlink->href.'">'.$site->mainlink->text.' &nbsp;</a>
 <!--
 <a href="https://zavod.games/#jobs">
-<img align="right" src="https://web.archive.org/web/20181229174815im_/https://gamedev.ru/files/images/zavodgames.gif"/></a>
+<img align="right" src="https://gamedev.ru/files/images/zavodgames.gif"/></a>
 -->
 </div>
 
  <div id="path"><div id="search" style="float: right;"></div>
- <b>'.$site->slogan.'</b> [<a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/forum/">Форум</a> / <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/?info">Инфо</a>]
+ <b>'.$site->slogan.'</b> [<a href="https://gamedev.ru/forum/">Форум</a> / <a href="https://gamedev.ru/?info">Инфо</a>]
  </div>
 
  <div id="container">';
@@ -90,7 +90,7 @@ echo '
   
 
 echo'
- <div id="footer"> <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/users/?login">Войти</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/members/">Участники</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/top/">Каталог сайтов</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/tags/">Категории</a> | <a href="https://web.archive.org/web/20181229174815/https://gamedev.ru/news/?adoc=arch">Архив новостей</a></div>
+ <div id="footer"> <a href="https://gamedev.ru/users/?login">Войти</a> | <a href="https://gamedev.ru/members/">Участники</a> | <a href="https://gamedev.ru/top/">Каталог сайтов</a> | <a href="https://gamedev.ru/tags/">Категории</a> | <a href="https://gamedev.ru/news/?adoc=arch">Архив новостей</a></div>
  <div id="bottom">
    <div>2001—2019 &copy; <b>'.$site->slogan.'</b></div>
    <div id="social"></div>
