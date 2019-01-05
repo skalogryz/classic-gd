@@ -351,6 +351,8 @@ function GatherSite($xpath, $site, $type)
   if ($type=="thread") GatherThread($xpath, $site);
   else if ($type=="forum") GatherForum($xpath, $site);
   else if ($type=="main") GatherMain($xpath, $site);
+
+  if (sizeof($site->footerlinks)==0) $site->defaultFooterLinks();
 }
 
 ?>

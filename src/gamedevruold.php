@@ -87,17 +87,24 @@ echo '
   </div>
 ';
 
-  
 
-echo'
- <div id="footer"> <a href="https://gamedev.ru/users/?login">Войти</a> | <a href="https://gamedev.ru/members/">Участники</a> | <a href="https://gamedev.ru/top/">Каталог сайтов</a> | <a href="https://gamedev.ru/tags/">Категории</a> | <a href="https://gamedev.ru/news/?adoc=arch">Архив новостей</a></div>
- <div id="bottom">
+echo '<div id="footer">';
+for ($i = 0; $i < sizeof($site->footerlinks); $i++)
+{
+  $link = $site->footerlinks[$i];
+  if ($i > 0) echo " | ";
+  echo $link->toHTML();
+}
+echo  '</div>';
+
+echo '<div id="bottom">
    <div>2001—2019 &copy; <b>'.$site->slogan.'</b></div>
    <div id="social"></div>
    <div id="pda"></div>
  </div>
+ <div class="seo"></div>';
 
- <div class="seo"></div>
+echo'
 <script type="application/javascript"><!--';
 
 if ($site->basepath!="") 

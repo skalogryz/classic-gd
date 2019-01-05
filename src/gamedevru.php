@@ -3,9 +3,16 @@
 
 class ALink
 {
-  public $text = "";
-  public $href = "";
-  public $title = "";
+  public $text;
+  public $href;
+  public $title;
+
+  function __construct ($text = "", $href = "", $title = "")
+  {
+    $this->text = $text;
+    $this->href = $href;
+    $this->title = $title;
+  }
 
   public function rebase($newbase, $oldbase)
   {
@@ -176,6 +183,7 @@ class GameDev
   public $editcheck="";
 
   public $articles = array();
+  public $footerlinks = array();
 
   function __construct()
   {
@@ -201,24 +209,13 @@ class GameDev
 
   public function rebase($newbase, $oldbase = "https://gamedev.ru")
   { 
-    foreach ($this->pages as $link) 
-    { 
-      $link->rebase($newbase, $oldbase);
-    }
-    foreach ($this->messages as $msg) 
-    {
-      $msg->rebase($newbase, $oldbase);
-    }
-    foreach ($this->menus as $mnu)
-      $mnu->rebase($newbase, $oldbase);
-    foreach ($this->forums as $forum)
-      $forum->rebase($newbase, $oldbase);
-    foreach ($this->paths as $link) { 
-      $link->rebase($newbase, $oldbase);
-    }
-    foreach ($this->articles as $art) { 
-      $art->rebase($newbase, $oldbase);
-    }
+    foreach ($this->pages as $link)   $link->rebase($newbase, $oldbase);
+    foreach ($this->messages as $msg) $msg->rebase($newbase, $oldbase);
+    foreach ($this->menus as $mnu)    $mnu->rebase($newbase, $oldbase);
+    foreach ($this->forums as $forum) $forum->rebase($newbase, $oldbase);
+    foreach ($this->paths as $link)   $link->rebase($newbase, $oldbase);
+    foreach ($this->articles as $art) $art->rebase($newbase, $oldbase);
+    foreach ($this->footerlinks as $link) $link->rebase($newbase, $oldbase);
   }
 
   public function addMenu()
@@ -248,6 +245,23 @@ class GameDev
      array_push($this->articles, $art);
      return $art;
   }
+
+  public function addFooterLink($text = "", $href = "", $title = "")
+  {
+     $link = new ALink($text, $href, $title);
+     array_push($this->footerlinks, $link);
+     return $link;
+  }
+
+  public function defaultFooterLinks()
+  {
+    if ($this->isGuest) $this->addFooterLink("Войти", "https://gamedev.ru/users/?login");
+    $this->addFooterLink("Участники", "https://gamedev.ru/members/");
+    $this->addFooterLink("Каталог сайтов", "https://gamedev.ru/top/");
+    $this->addFooterLink("Категории", "https://gamedev.ru/tags/");
+    $this->addFooterLink("Архив новостей", "https://gamedev.ru/news/?adoc=arch");
+  }
+
 }
 
 ?>
