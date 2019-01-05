@@ -6,9 +6,9 @@
 #define MyAppPublisher "skalogryz"
 #define MyAppURL "http://www.github.com/skalogryz/classic-gd/wiki"
 ; let's make it xampp based initially
-#define ApacheDir = "C:\xampp\apache"
-#define PhpDir = "C:\xampp\php"
-#define ClassicGDSrcDir = "C:\FPC_Laz\gd2.ru\src"
+#define ApacheDir = "D:\xampp\apache"
+#define PhpDir = "D:\xampp\php"
+#define ClassicGDSrcDir = "..\src"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -40,10 +40,100 @@ Source: "{#ApacheDir}\error\*"; DestDir: "{app}\apache\error"; Flags: ignorevers
 Source: "{#ApacheDir}\icons\*"; DestDir: "{app}\apache\icons"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#ApacheDir}\lib\*"; DestDir: "{app}\apache\lib"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#ApacheDir}\modules\*"; DestDir: "{app}\apache\modules"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#PhpDir}\*"; DestDir: "{app}\php"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#ApacheDir}\conf\*"; DestDir: "{app}\apache\conf"; Flags: ignoreversion; Excludes: "httpd.conf,openssl.cnf";
+Source: ".\httpd.conf"; DestDir: "{app}\apache\conf"; Flags: ignoreversion; AfterInstall: UpdateApacheConfig;
+Source: ".\index.html"; DestDir: "{app}\apache\htdocs\"; Flags: ignoreversion; 
+Source: "{#PhpDir}\*"; DestDir: "{app}\php"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "php.ini"
+Source: ".\php.ini"; DestDir: "{app}\php\"; Flags: ignoreversion; AfterInstall: UpdatePhpConfig;
 Source: "{#ClassicGDSrcDir}\*"; DestDir: "{app}\src"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+[Dirs]
+Name: "{app}\apache\logs"
 
 [Icons]
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
+[Run]
+Filename: "{app}\apache\bin\httpd.exe"; Parameters: "-k install -n ClassicGDServer"
+Filename: "{app}\apache\bin\httpd.exe"; Parameters: "-k start -n ClassicGDServer"
+
+[UninstallRun]
+Filename: "{app}\apache\bin\httpd.exe"; Parameters: "-k stop -n ClassicGDServer"
+Filename: "{app}\apache\bin\httpd.exe"; Parameters: "-k uninstall -n ClassicGDServer"
+
+[Code]
+
+procedure UpdateApacheConfig;
+var
+  fs : TStringList;
+  i  : integer;
+  s  : string;
+  apacheroot : string;
+  docroot   : string;
+  instdir   : string;
+  fn : string;
+begin
+  try
+    fs := TStringList.Create;
+    try
+      instdir :=  ExpandConstant('{app}');
+      StringChangeEx(instdir, '\', '/', True);
+
+      apacheroot :=  ExpandConstant('{app}\apache');
+      StringChangeEx(apacheroot, '\', '/', True);
+
+      docroot :=  ExpandConstant('{app}\apache\htdocs');
+      StringChangeEx(docroot, '\', '/', True);
+
+
+      fn := ExpandConstant(CurrentFileName);
+      fs.LoadFromFile(fn);
+  
+      for i:=0 to fs.Count-1 do begin
+        s:=fs[i];
+        StringChangeEx(s, '%APACHEROOT%', apacheroot, True);
+        StringChangeEx(s, '%DOCROOT%', docroot, True);
+        StringChangeEx(s, '%INSTALLDIR%', instdir, True);
+        fs[i]:=s;
+      end;
+      fs.SaveToFile(fn);
+    finally
+      fs.Free;
+    end;
+  except
+    MsgBox('failed updating: '+ExceptionParam, mbInformation, MB_OK);
+  end;
+end;
+
+procedure UpdatePhpConfig;
+var
+  fs : TStringList;
+  i  : integer;
+  s  : string;
+  appdata : string;
+  instdir : string;
+  fn : string;
+begin
+  try
+    fs := TStringList.Create;
+    try
+      instdir :=  ExpandConstant('{app}');
+      appdata :=  ExpandConstant('{userappdata}');
+
+      fn := ExpandConstant(CurrentFileName);
+      fs.LoadFromFile(fn);
+  
+      for i:=0 to fs.Count-1 do begin
+        s:=fs[i];
+        StringChangeEx(s, '%APPDATA%', appdata, True);
+        StringChangeEx(s, '%INSTALLDIR%', instdir, True);
+        fs[i]:=s;
+      end;
+      fs.SaveToFile(fn);
+    finally
+      fs.Free;
+    end;
+  except
+    MsgBox('failed updating: '+ExceptionParam, mbInformation, MB_OK);
+  end;
+end;
