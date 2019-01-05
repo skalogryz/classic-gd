@@ -349,6 +349,24 @@ function OutputPaths($site)
   echo '</p>';
 }
 
+function OutputArticles($site)
+{
+  if (sizeof($site->articles)==0) return;
+  echo '<div class="docs">';
+  echo '<div class="menucode"><h2><a href="https://gamedev.ru/articles/">Новости и Статьи</a></h2></div>';
+  foreach($site->articles as $art) 
+  {
+    echo '<a id="'.$art->id.'"></a>';
+    echo '<table width="100%" cellspacing="1" cellpadding="3">
+<tbody><tr>
+<td class="co" style=" "><b>'.$art->link->toHTML().'</b></td>
+</tr>
+</tbody></table>';
+    echo $art->html;
+  }
+  echo '</div>';
+}
+
 
 function OutputSite($site, $type)
 {
@@ -376,6 +394,7 @@ function OutputSite($site, $type)
     OutputLeft($site);
     OutputMainStart($site->title);
     OutputPages($site);
+    OutputArticles($site);
     OutputPages($site);
     OutputMainEnd($site, false);
     OutputEnd($site);

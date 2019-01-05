@@ -105,8 +105,10 @@ function RemoveSlash($a)
   // todo: cleanup the mess! :(
   //if ($_SERVER["REQUEST_METHOD"] != 'POST') {
   
-    $url = substr_replace($url, "", 0, strlen($g_proxypath));
-    $url = JoinUrls($g_truesite,$url);
+  $url = substr_replace($url, "", 0, strlen($g_proxypath));
+  $forumpath = $url; 
+
+  $url = JoinUrls($g_truesite,$url);
   //} else {
   //  if (strpos($url, "/")==0) $url=substr($url, 1);
   //  $url = $g_truesite.$url;
@@ -115,8 +117,11 @@ function RemoveSlash($a)
   $page = callHttp($url, $_SERVER["REQUEST_METHOD"], RemoveSlash($basepath), RemoveSlash($g_truesite));
 
   $mode = "";
-  if (strpos($_SERVER["SCRIPT_URL"], '/forum')) 
+  if (($forumpath =="")||($forumpath =="/"))
+    $mode = "main";
+  else if (strpos($forumpath, '/forum')) 
     $mode = "forum";
+
   if (($mode == "forum")&&(array_key_exists("id", $_GET))) 
     $mode = "thread";
   

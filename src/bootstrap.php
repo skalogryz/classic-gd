@@ -12,6 +12,10 @@ require_once("gamedevru.php");
  $common_sel_submenus ="./ul/li";
  $common_sel_menulink = "./a";
 
+ $art_id = "/html/body/div/a[contains(@id,'d_')]";
+ $art_link = "./following-sibling::b/a";
+ $art_html = "./following-sibling::div[contains(@class, 'text')]";
+
  $edit_text         = "//textarea[contains(@class,'gdr')]";
  $edit_checkvalue   = "//input[contains(@name, 'huyita')]";
  $edit_previewstart = "//div[contains(@id,'preview')]"; // div, за которым начинается preview
@@ -283,6 +287,49 @@ function GatherForum($xpath, $site)
   }
 }
 
+function GatherMain($xpath, $site)
+{
+  global 
+    $art_id,
+    $art_link,
+    $art_html;
+
+  $arts = $xpath->query($art_id);
+  foreach($arts as $a)
+  {
+    $art = $site->addArticle();
+    $art->id = $a->getAttribute('id');
+
+    $xml = $xpath->query($art_link, $a);
+    if ($xml->length>0) $art->link->fromXML($xml[0]);
+
+    $xml = $xpath->query($art_html, $a);
+    if ($xml->length>0) $art->html.=$xpath->document->saveHTML($xml[0]);
+  }
+
+/*
+  global $common_sel_title;
+
+
+  $xml = $xpath->query($common_sel_title);
+  if ($xml->length==0) return;
+
+  $x=$xml[0];
+  $x=$x->nextSibling;
+  
+  $art = null;
+  while ($x!=null) {
+    if (($x->nodeName)=="a") $art = $site->addArticle();
+
+    if ($art!=null) $art->html.=$xpath->document->saveHTML($x);
+
+    $x=$x->nextSibling;
+  }
+*/
+}
+
+
+
 // парсим страницу сайта
 // нужно передавать формат странички сайта, исходя из его адреса
 function GatherSite($xpath, $site, $type)
@@ -303,6 +350,7 @@ function GatherSite($xpath, $site, $type)
  
   if ($type=="thread") GatherThread($xpath, $site);
   else if ($type=="forum") GatherForum($xpath, $site);
+  else if ($type=="main") GatherMain($xpath, $site);
 }
 
 ?>

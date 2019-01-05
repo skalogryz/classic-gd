@@ -131,6 +131,29 @@ class Forum
   }
 }
 
+class Article
+{
+  public $id; 
+  public $link; // do not rebase (for now)
+  //public $img;
+  //public $author;
+  //public $title;
+  //public $shortext;
+  //public $paths = array();
+  public $html;
+
+  function __construct()
+  {
+    $this->link = new ALink();
+  }
+
+  function rebase($newbase, $oldbase)
+  {
+    //пока не нужно. пусть отправляет на основной сайт!
+    //$this->link->rebase($newbase, $oldbase)
+  }
+  
+}
 
 class GameDev
 {
@@ -151,6 +174,8 @@ class GameDev
   public $previewhtml = "";
   public $edittext="";
   public $editcheck="";
+
+  public $articles = array();
 
   function __construct()
   {
@@ -191,6 +216,9 @@ class GameDev
     foreach ($this->paths as $link) { 
       $link->rebase($newbase, $oldbase);
     }
+    foreach ($this->articles as $art) { 
+      $art->rebase($newbase, $oldbase);
+    }
   }
 
   public function addMenu()
@@ -212,6 +240,13 @@ class GameDev
      $path = new ALink();
      array_push($this->paths, $path);
      return $path;
+  }
+
+  public function addArticle()
+  {
+     $art = new Article();
+     array_push($this->articles, $art);
+     return $art;
   }
 }
 
