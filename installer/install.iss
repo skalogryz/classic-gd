@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Classic gamedev.ru"
-#define MyAppVersion "0.9.1"
+#define MyAppVersion "0.9.2"
 #define MyAppPublisher "skalogryz"
 #define MyAppURL "http://www.github.com/skalogryz/classic-gd/wiki"
 ; let's make it xampp based initially
