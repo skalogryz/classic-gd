@@ -280,17 +280,42 @@ function OutputForum($site)
   $lastlvl = -1;
   $even = false;
 
-  $i = 0;
-  while ($i < sizeof($site->forums))
-  {
-    $frm = $site->forums[$i];
-    if ($frm->level==0)
-      $i = OutputForum0($site->forums, $i);
-    else if ($frm->level==1) 
-      $i = OutputForum1($site->forums, $i);
-    else 
-      $i = OutputForum2($site->forums, $i);
+  $lvl0 = 0;
+  $lvl1 = 0;
+  $lvl2 = 0;
+  foreach ($site->forums as $frm) { 
+    if ($frm->level==0) $lvl0++;
+    else if ($frm->level==1) $lvl1++;
+    else $lvl2++;
   }
+  
+  $islvl2only = (($lvl2>0)&&($lvl1==0)&&($lvl0==0));
+   
+  if ($islvl2only) {
+    echo '<table class="r" cellspacing="1"><tbody><tr>';
+    echo '<th>Название</th>';
+    echo '<th width="120" style="text-align: center;">Автор</th>';
+    echo '<th width="120" style="text-align: center;">Последний</th>';
+    echo '<th width="40" style="text-align: right;">Отв.</th>';
+    echo '<th width="110" style="text-align: right;">Обновление</th>';
+    echo '</tr>';
+    $i=0;
+    OutputForum2($site->forums, $i);
+    echo "</tbody></table>";
+  } else {
+    $i = 0;
+    while ($i < sizeof($site->forums))
+    {
+      $frm = $site->forums[$i];
+      if ($frm->level==0)
+        $i = OutputForum0($site->forums, $i);
+      else if ($frm->level==1) 
+        $i = OutputForum1($site->forums, $i);
+      else 
+        $i = OutputForum2($site->forums, $i);
+    }       
+  }
+
 }
 
 function OutputPages($site)
