@@ -436,7 +436,8 @@ function Core_AddSound(id, file) {
 
 var Search = {
 	submit: function (form) {
-		window.location.href = 'https://google.com/search?q=' + encodeURIComponent('site:' + document.domain + ' ' + form.q.value);
+                var dom = (!skif.searchdomain) ? document.domain : skif.searchdomain;
+		window.location.href = 'https://google.com/search?q=' + encodeURIComponent('site:' + dom + ' ' + form.q.value);
 		return false;
 	},
 
@@ -569,25 +570,3 @@ skif.site = {
 			*/
 	}
 };
-
-/*
-     FILE ARCHIVED ON 11:41:00 Dec 08, 2018 AND RETRIEVED FROM THE
-     INTERNET ARCHIVE ON 00:05:32 Jan 04, 2019.
-     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
-
-     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
-     SECTION 108(a)(3)).
-*/
-/*
-playback timings (ms):
-  LoadShardBlock: 144.902 (3)
-  esindex: 0.011
-  captures_list: 165.653
-  CDXLines.iter: 13.099 (3)
-  PetaboxLoader3.datanode: 91.826 (4)
-  exclusion.robots: 0.262
-  exclusion.robots.policy: 0.241
-  RedisCDXSource: 2.079
-  PetaboxLoader3.resolve: 70.57 (3)
-  load_resource: 76.843
-*/

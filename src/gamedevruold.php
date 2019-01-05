@@ -103,6 +103,7 @@ echo'
 if ($site->basepath!="") 
 echo '
 skif.domain = "'.$site->basepath.'";
+skif.searchdomain = "gamedev.ru";
 ';
 
 echo ' skif.run();
