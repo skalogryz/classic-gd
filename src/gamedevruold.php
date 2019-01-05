@@ -70,7 +70,7 @@ function verifySubmitFields(form)
 <p><label for="subscribe"><input type="checkbox" id="subscribe" name="subscribe">Получать ответы на e-mail</label>
 
 <input type="hidden" name="action" value="autopost">
-<input type="hidden" name="huyita" value="486ba7976a318e2c">
+<input type="hidden" name="huyita" value="'.$site->editcheck.'">
 </p><p class="r"><input id="_gdr_preview" name="_gdr_preview" type="submit" value="Предпросмотр">
 <input id="_gdr_post" name="_gdr_post" type="submit" class="blue" value="Отправить"></p>
 </form>

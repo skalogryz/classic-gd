@@ -12,10 +12,13 @@ require_once("gamedevru.php");
  $common_sel_submenus ="./ul/li";
  $common_sel_menulink = "./a";
 
- $common_sel_edituserlink = "//div[contains(@id,'preview')]/following-sibling::h2//a";
- $common_sel_previewstart = "//div[contains(@id,'preview')]"; // div, за которым начинается preview
- $common_sel_previewend = "//div[contains(@id,'preview')]/following-sibling::h2";  // div, перед которым preview кончается
- $common_edittext = "//textarea[contains(@class,'gdr')]";
+ $edit_text         = "//textarea[contains(@class,'gdr')]";
+ $edit_checkvalue   = "//input[contains(@name, 'huyita')]";
+ $edit_previewstart = "//div[contains(@id,'preview')]"; // div, за которым начинается preview
+ $edit_previewend   = "//div[contains(@id,'preview')]/following-sibling::h2";  // div, перед которым preview кончается
+ $edit_userlink     = "//div[contains(@id,'preview')]/following-sibling::h2//a";
+
+ $common_sel_edituserlink = $edit_userlink;
 
  // xpath для сообщений
  $tm_sel = "/html/body/div[contains(@class, 'head')]"; // тэг, указывающий на присутствие 
@@ -165,10 +168,12 @@ function GatherMenus($xpath, $site)
 
 function GatherEdit($xpath, $site)
 {
-  global $common_sel_previewstart, $common_sel_previewend, $common_edittext;
+  global $edit_previewstart, $edit_previewend, $edit_text
+    ,$edit_checkvalue;
+
   // внимание. возможное в будущем это поменяется 
-  $st = $xpath->query($common_sel_previewstart);
-  $end = $xpath->query($common_sel_previewend);
+  $st = $xpath->query($edit_previewstart);
+  $end = $xpath->query($edit_previewend);
 
   if (($st->length>0)&&($end->length>0)) {
     $x = $st[0]->nextSibling;
@@ -180,8 +185,11 @@ function GatherEdit($xpath, $site)
     }
   }
 
-  $st = $xpath->query($common_edittext);
+  $st = $xpath->query($edit_text);
   if ($st->length>0) $site->edittext = $st[0]->textContent;
+
+  $st = $xpath->query($edit_checkvalue);
+  if ($st->length>0) $site->editcheck = $st[0]->getAttribute('value');
 }
 
 // парсим страницу треда обсуждений 

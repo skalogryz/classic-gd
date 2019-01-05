@@ -150,6 +150,7 @@ class GameDev
   public $userlink;
   public $previewhtml = "";
   public $edittext="";
+  public $editcheck="";
 
   function __construct()
   {
