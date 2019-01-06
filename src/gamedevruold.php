@@ -161,6 +161,11 @@ function OutputThread($site)
 
   foreach($site->messages as $msg)
   {
+    if ($msg->timepass) {
+      echo '<div class="timePassed" style="text-align:center; font-size:2em; margin-bottom:1em; margin-top:1em">... '.$msg->html.' ...</div>';
+      continue;
+    }
+  
     echo '<div id="'.$msg->id.'" class="mes">';
     echo '<table class="mes"><tbody><tr>';
     if ($msg->isComplex) echo '<th class="red">'; else echo "<th>";

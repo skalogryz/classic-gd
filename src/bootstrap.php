@@ -25,7 +25,9 @@ require_once("gamedevru.php");
  $common_sel_edituserlink = $edit_userlink;
 
  // xpath для сообщений
- $tm_sel = "/html/body/div[contains(@class, 'head')]"; // тэг, указывающий на присутствие 
+ $tm_sel = "/html/body/div[contains(@class, 'head')]"
+         ."|/html/body/div[contains(@class, 'timePassed')]"; // тэг, указывающий на присутствие сообщения
+   ;
  $tm_sel_messageid = "div[contains(@class, 'right')]/a"; // ссылка сообщения
  $tm_sel_userlink  = "(./ul/li/a)[1]"; // ссылка на юзера 
  $tm_sel_level     = "./ul/li[2]/a|./ul/li[2]"; // ссылка (либо текст) уровня юзера, "Пользователь/Учатник/Забанен"
@@ -68,6 +70,13 @@ function GatherMessages($xpath, $site)
   $msglist = $xpath->query($tm_sel);
   foreach($msglist as $elem) {
     $msg = $site->addMessage();    
+
+    if (!(strpos( $elem->getAttribute('class'), "timePassed")===false))
+    {
+      $msg->timepass = true;
+      $msg->html = $elem->textContent;
+      continue;
+    }
 
     $msg->id = $elem->getAttribute('id'); 
      

@@ -62,6 +62,7 @@ class Message
    public $quotenick;          // имя ника для цитирования
    public $editlink;
    public $deletelink;
+   public $timepass = false;
    function __construct()
    {
       $this->msglink = new ALink();
