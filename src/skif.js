@@ -301,6 +301,18 @@ function key_pressed(event) {
 }
 
 
+function editpasted(event)
+{
+  var str = event.clipboardData.getData("text/plain");
+  var d = skif.domain;
+  var trg = "https://gamedev.ru/";
+  while (str.indexOf(d)>=0) str = str.replace(d, trg);
+  if ((event.target)&&(event.target.setRangeText)) {
+    event.preventDefault();
+    event.target.setRangeText(str);
+  }
+}
+
 function Core_OutAreaTags() {
 	var s = document.getElementById('areatags');
 	if (s == null)

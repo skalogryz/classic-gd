@@ -66,7 +66,7 @@ function verifySubmitFields(form)
 
 <p><b>Сообщение:</b> Максимум 10000 символов. Отправить: Ctrl+Shift+Enter</p>
 <p><span id="areatags"></span>
-<textarea class="gdr" name="text" cols="68" rows="18" onkeydown="key_pressed(event);">'.$site->edittext.'</textarea></p>
+<textarea onpaste="editpasted(event)" class="gdr" name="text" cols="68" rows="18" onkeydown="key_pressed(event);">'.$site->edittext.'</textarea></p>
 <p><label for="subscribe"><input type="checkbox" id="subscribe" name="subscribe">Получать ответы на e-mail</label>
 
 <input type="hidden" name="action" value="autopost">
