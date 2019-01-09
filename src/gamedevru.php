@@ -110,6 +110,7 @@ class Forum
 {
   public $level;  // 0 - master, 1 - section, 2 - thread
   public $link;   // имя/ссылка
+  public $seclink; // ссылка на секцию (используется в "дочерних форумах" н.р   Urtho 3D: Болатлка -> $seclink : $link
   public $isComplex = false; // сложная тема или повышенной важности
   public $isTitle = false;   // заголовок дочерние форумы
   public $replies = "";
@@ -121,6 +122,7 @@ class Forum
   {
     $this->link = new ALink();
     $this->lastreplylink = new ALink();
+    $this->seclink = new ALink();
   }
 
   function addPage()
@@ -134,6 +136,7 @@ class Forum
   {  
     $this->link->rebase($newbase, $oldbase);
     $this->lastreplylink->rebase($newbase, $oldbase);
+    $this->seclink->rebase($newbase, $oldbase);
     foreach($this->pages as $page)
       $page->rebase($newbase, $oldbase);
   }

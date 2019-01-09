@@ -263,9 +263,17 @@ function GatherForum($xpath, $site)
       $f->level = 2;
       $x = $xpath->query($frm_sel_threadlink, $xml);
       if ($x->length>0) {
-        $x = $x[0];
-        $f->isComplex = (($x->parentNode!=null)&&($x->parentNode->nodeName=="b"));
-        $f->link->fromXML($x);
+
+        if (($x->length==1)) {
+          // "обычный форум" - тут всего одна ссылка
+          $x = $x[0];
+          $f->isComplex = (($x->parentNode!=null)&&($x->parentNode->nodeName=="b"));
+          $f->link->fromXML($x);
+        } else { 
+          // "дочерние форумы" - в них находится 2 ссылки секция+форум
+          $f->seclink->fromXML($x[0]);
+          $f->link->fromXML($x[1]);
+        }
       }
 
       $x = $xpath->query($frm_sel_replies, $xml);

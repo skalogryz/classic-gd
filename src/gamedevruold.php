@@ -204,62 +204,114 @@ function OutputThread($site)
   }
 }
 
-function OutputForum2($forums, $i)
+// дочерние форумы
+function OutputForum2Daughter($frm, $even)
+{
+  if ($frm->isComplex) echo '<tr class="red">';
+  else if ($even) echo '<tr class="sec">';
+  else echo '<tr>';
+
+  echo '<td><b>'.$frm->link->toHTML().'</b>';
+
+  $cnt = 0;
+  if (sizeof($frm->pages)>0) {
+    echo ' [&nbsp;';
+    $lastpg = intval($frm->pages[0]->text)-1;
+    foreach ($frm->pages as $page) {
+      $pg = intval($page->text);
+      if ($pg!=$lastpg+1) echo " &hellip;";
+      $lastpg = $pg;
+      if ($cnt>0) echo " ";
+      $cnt++;
+      echo $page->toHTML();
+    }
+    echo '&nbsp;]';
+  }
+  echo '</td>';
+  echo '<td style="text-align: center;">'.$frm->author.'</td>';
+  echo '<td style="text-align: right;">'.$frm->replies.'</td>';
+  echo '<td style="text-align: right;"><small>'.$frm->lastreplyname." ".$frm->lastreplylink->toHTML().'</small></td>';
+  echo '<td><b>'.$frm->seclink->toHTML().'</b>';
+  echo '</tr>';
+}
+
+function OutputForum2Default($frm, $even)
+{
+  if ($frm->isComplex) echo '<tr class="red">';
+  else if ($even) echo '<tr class="sec">';
+  else echo '<tr>';
+
+  echo '<td><b>';
+  $lstr = $frm->seclink->toHTML();
+  if ($lstr!="") echo $lstr.": ";
+
+  echo $frm->link->toHTML();
+  echo '</b>';
+
+  $cnt = 0;
+  if (sizeof($frm->pages)>0) {
+    echo ' [&nbsp;';
+    $lastpg = intval($frm->pages[0]->text)-1;
+    foreach ($frm->pages as $page) {
+      $pg = intval($page->text);
+      if ($pg!=$lastpg+1) echo " &hellip;";
+      $lastpg = $pg;
+      if ($cnt>0) echo " ";
+      $cnt++;
+      echo $page->toHTML();
+    }
+    echo '&nbsp;]';
+  }
+  echo '</td>';
+  echo '<td style="text-align: center;">'.$frm->author.'</td>';
+  echo '<td style="text-align: center;">'.$frm->lastreplyname.'</td>';
+  echo '<td style="text-align: right;">'.$frm->replies.'</td>';
+  echo '<td style="text-align: right;">'.$frm->lastreplylink->toHTML().'</td>';
+  echo '</tr>';
+}
+
+
+function OutputForum2($forums, $i, $isdaught = false)
 {
   $even = false;
   while ($i<sizeof($forums)&&($forums[$i]->level==2)) 
   {
     $frm = $forums[$i];
-    if ($frm->isComplex) echo '<tr class="red">';
-    else if ($even) echo '<tr class="sec">';
-    else echo '<tr>';
+    // можно и не использовать формат дочерних форумов!, просто всегда выводить как Default
+    // но тогда и заголовки нужно выводить не для дочерних!
+    if ($isdaught) OutputForum2Daughter($frm, $even);
+    else OutputForum2Default($frm, $even);
     $even = !$even;
-    echo '<td><b>'.$frm->link->toHTML().'</b>';
-    $cnt = 0;
-    if (sizeof($frm->pages)>0) {
-      echo ' [&nbsp;';
-      $lastpg = intval($frm->pages[0]->text)-1;
-      foreach ($frm->pages as $page) {
-        $pg = intval($page->text);
-        if ($pg!=$lastpg+1) echo " &hellip;";
-        $lastpg = $pg;
-        if ($cnt>0) echo " ";
-        $cnt++;
-        echo $page->toHTML();
-      }
-      echo '&nbsp;]';
-    }
-    echo '</td>';
-    echo '<td style="text-align: center;">'.$frm->author.'</td>';
-    echo '<td style="text-align: center;">'.$frm->lastreplyname.'</td>';
-    echo '<td style="text-align: right;">'.$frm->replies.'</td>';
-    echo '<td style="text-align: right;">'.$frm->lastreplylink->toHTML().'</td>';
-    echo '</tr>';
     $i++;
   }
   return $i;
 }
-
 
 function OutputForum1($forums, $i)
 {
   while ($i<sizeof($forums)&&($forums[$i]->level>=1)) 
   {
     $frm = $forums[$i];
+    $isdaught = false;
     echo '<table class="r" cellspacing="1"><tbody><tr>';
     if ($frm->level==1) {
       echo '<th>'.$frm->link->toHTML().'</th>';
+      echo '<th width="120" style="text-align: center;">Автор</th>';
+      echo '<th width="120" style="text-align: center;">Последний</th>';
+      echo '<th width="40" style="text-align: right;">Отв.</th>';
+      echo '<th width="110" style="text-align: right;">Обновление</th>';
       $i++;
     } else {
-      echo '<th></th>';
+      $isdaught = true;
+      echo '<th>Название</th>';
+      echo '<th width="120" style="text-align: center;">Автор</th>';
+      echo '<th width="40" style="text-align: right;">Отв.</th>';
+      echo '<th width="130" style="text-align: right;">Обнов.</th>';
+      echo '<th width="120">Раздел</th>';
     }
-    echo '<th width="120" style="text-align: center;">Автор</th>';
-    echo '<th width="120" style="text-align: center;">Последний</th>';
-    echo '<th width="40" style="text-align: right;">Отв.</th>';
-    echo '<th width="110" style="text-align: right;">Обновление</th>';
     echo '</tr>';
 
-    $i=OutputForum2($forums, $i);
+    $i=OutputForum2($forums, $i, $isdaught);
     echo '</tbody></table>';
     echo '<div style="height: 10px"></div>';
   }
