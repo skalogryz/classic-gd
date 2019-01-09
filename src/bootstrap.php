@@ -8,7 +8,7 @@ require_once("gamedevru.php");
  $common_sel_pages = "(/html/body/div[contains(@class, 'bound')]/div[contains(@class, 'pages')])[1]/a"
                     ."|(/html/body/div[contains(@class, 'bound')]/div[contains(@class, 'pages')])[1]/span";
  $common_sel_login  = "//div[contains(@id,'login')]";
- $common_sel_menus  ="/html/body/div[contains(@id,'tool')]/div/div[contains(@id,'menu')]/div/ul/li";
+ $common_sel_menus  ="//div[contains(@id,'tool')]//div[contains(@id,'menu')]/div/ul/li";
  $common_sel_submenus ="./ul/li";
  $common_sel_menulink = "./a";
 
