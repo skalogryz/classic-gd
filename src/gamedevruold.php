@@ -475,6 +475,8 @@ function OutputSummary($site)
      echo '</div>';
   }
   $cnt = 0;
+  $ttl = 0;
+  $usettl = true;
   foreach($site->summaries as $sm)
   {
      if (!$sm->subfrmsum) continue;
@@ -488,10 +490,12 @@ function OutputSummary($site)
      echo '</b></td><td style="text-align: right;">';
      echo $sm->total;
      echo '</td><td style="text-align: right;"></td></tr>';
+     $ttl += intval(trim($sm->total));
   }
   if ($cnt>0) {
     echo '</tbody></table>';
-    echo '<p class="r">'.$site->summaryText.'</p>';
+    if ($usettl) echo '<p class="r">Всего тем: '.$ttl.', Сообщений: много</p>';
+    else echo '<p class="r">'.$site->summaryText.'</p>';
   }
 
 }
