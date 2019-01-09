@@ -457,6 +457,45 @@ function OutputArticles($site)
   echo '</div>';
 }
 
+function OutputSummary($site)
+{
+  foreach($site->summaries as $sm)
+  {
+     if ($sm->subfrmsum) continue;
+     echo '<div class="list">';
+     echo '<b>'.$sm->link->toHTML().'</b>';
+     if ($sm->total=="") echo ": "; 
+     else echo " [".$sm->total. "]";
+
+     foreach ($sm->subsum as $sub) 
+     {
+       echo $sub->link->toHTML();
+       echo " ".$sub->total." ";
+     }
+     echo '</div>';
+  }
+  $cnt = 0;
+  foreach($site->summaries as $sm)
+  {
+     if (!$sm->subfrmsum) continue;
+     if ($cnt == 0) echo '<table class="r" cellspacing="1"><tbody><tr>'
+         .'<th>Рубрика</th> <th width="60" style="text-align: right;">Темы</th> <th width="100" style="text-align: right;">Сообщения</th>'
+         .'</tr>';
+     $cnt++;
+
+     echo '<tr><td><b>';
+     echo $sm->link->toHTML();
+     echo '</b></td><td style="text-align: right;">';
+     echo $sm->total;
+     echo '</td><td style="text-align: right;"></td></tr>';
+  }
+  if ($cnt>0) {
+    echo '</tbody></table>';
+    echo '<p class="r">'.$site->summaryText.'</p>';
+  }
+
+}
+
 
 function OutputSite($site, $type)
 {
@@ -474,6 +513,7 @@ function OutputSite($site, $type)
     OutputBegin($site);
     OutputLeft($site);
     OutputMainStart($site->title);
+    OutputSummary($site);
     OutputPages($site);
     OutputForum($site);
     OutputPages($site);

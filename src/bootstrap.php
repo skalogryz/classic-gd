@@ -45,6 +45,14 @@ require_once("gamedevru.php");
  $tm_sel_quotenick = ".//div[contains(@class, 'fquote')]";
 
  // селекторы для раздела форумов
+ $frm_sel_summary      = "//div[contains(@class, 'list')]"; // итого!
+ $frm_sel_summary_link = "./b/a"; // ссылка на чат в заголовке итого!
+
+ $frm_sel_secsummary   = "//table[contains(@class, 'page')]//tr";
+ $frm_sel_secsummary_link   = ".//a";
+ $frm_sel_secsummary_total  = ".//td[2]";
+
+
  $frm_sel_nextforum = "./following-sibling::h2"
                      ."|./following-sibling::h3"
                      ."|./following-sibling::p"
@@ -212,6 +220,64 @@ function GatherThread($xpath, $site)
   GatherEdit($xpath, $site);
 }
 
+function GatherSecSummary($xpath, $site)
+{
+  global  
+    $frm_sel_secsummary //   = "//table[contains(@class, 'page')]//tr";
+   ,$frm_sel_secsummary_link   //= ".//a";
+   ,$frm_sel_secsummary_total  //= ".//td[2]";
+  ;
+
+  $sumxml=$xpath->query($frm_sel_secsummary);
+  foreach($sumxml as $elem) 
+  {
+    $xml=$xpath->query($frm_sel_secsummary_link, $elem);
+    if ($xml->length==0) continue;
+
+    $sm = $site->addSummary();
+    if ($xml->length>0) $sm->link->fromXML($xml[0]);
+   
+    $xml=$xpath->query($frm_sel_secsummary_total, $elem);
+    if ($xml->length>0) $sm->total = $xml[0]->textContent;
+    $sm->subfrmsum = true;
+  }
+}
+
+function GatherSummary($xpath, $site)
+{
+  global $frm_sel_summary, $frm_sel_summary_link; 
+  $sumxml=$xpath->query($frm_sel_summary);
+  foreach($sumxml as $elem) 
+  {
+    $sm = $site->addSummary();
+
+    $xml = $xpath->query($frm_sel_summary_link, $elem);
+    if ($xml->length>0) $sm->link->fromXML($xml[0]);
+    $x = $elem->firstChild;
+    while (($x!=null)&&($x->nodeName=="#text"))
+      $x = $x->nextSibling;
+    $x = $x->nextSibling;
+    $txt = $x->textContent;
+      
+    if (strpos($txt, ":")===false) {
+      $txt = str_replace(array("[","]"), array("",""), $txt);
+      $sm->total = trim($txt);
+    } else {
+      $sm->total = "";
+      $x = $x->nextSibling;  
+      while ($x!=null) {
+        if ($x->nodeName == "a") {
+          $lsm = $sm->addSubSum();
+          $lsm->link->fromXML($x);
+          $x = $x->nextSibling;
+          if ($x!=null) $lsm->total = trim($x->textContent);
+        }
+        $x = $x->nextSibling;
+      }
+    }
+  } 
+}
+
 function GatherForum($xpath, $site)
 {
   global $common_sel_title  // = "/html/body/div[contains(@class, 'bound')]/h1";
@@ -222,16 +288,27 @@ function GatherForum($xpath, $site)
         ,$frm_sel_lastreplylink
         ,$frm_sel_author; 
 
+  GatherSummary($xpath, $site);
+  GatherSecSummary($xpath, $site);
+
   $xml = $xpath->query($common_sel_title);
   if ($xml->length==0) return;     
   $xml=$xml[0];
   $xml=$xml->nextSibling;
+
+  $tblcount = 0;
   while ($xml!=null) {
    
-    if ($xml->nodeName=="table") 
+    if ($xml->nodeName=="table")  {
       // summary table
+      if ($tblcount==0) {
+        $xml=$xml->nextSibling;
+        while (($xml!=null)&&($xml->nodeName=='#text'))  $xml=$xml->nextSibling;
+        $site->summaryText = $xml->textContent;
+      }
+      $tblcount++;
       ;
-    else if ($xml->nodeName=="p") 
+    } else if ($xml->nodeName=="p") 
       // summary label 
       ;
     else if ($xml->nodeName=="h2") {

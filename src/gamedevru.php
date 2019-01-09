@@ -166,6 +166,33 @@ class Article
   
 }
 
+class Summary
+{  
+  public $link;
+  public $total = "";
+  public $subsum = array();
+
+  public $subfrmsum = false; // итого "рубрики" (встречается в рубриках на 1й странице), выводится html таблицей
+
+  function __construct()
+  {
+    $this->link = new ALink(); 
+  }
+
+  function rebase($newbase, $oldbase)
+  {  
+    $this->link->rebase($newbase, $oldbase);
+    foreach($this->subsum as $s) $s->rebase($newbase, $oldbase);
+  }
+  
+  function addSubSum()
+  {
+    $s = new Summary();
+    array_push($this->subsum, $s);
+    return $s;
+  }
+}
+
 class GameDev
 {
   public $mainlink;
@@ -188,6 +215,8 @@ class GameDev
 
   public $articles = array();
   public $footerlinks = array();
+  public $summaries = array();
+  public $summaryText = "";
 
   function __construct()
   {
@@ -220,6 +249,7 @@ class GameDev
     foreach ($this->paths as $link)   $link->rebase($newbase, $oldbase);
     foreach ($this->articles as $art) $art->rebase($newbase, $oldbase);
     foreach ($this->footerlinks as $link) $link->rebase($newbase, $oldbase);
+    foreach ($this->summaries as $sm) $sm->rebase($newbase, $oldbase);
   }
 
   public function addMenu()
@@ -249,6 +279,14 @@ class GameDev
      array_push($this->articles, $art);
      return $art;
   }
+
+  public function addSummary()
+  {
+     $sm = new Summary();
+     array_push($this->summaries, $sm);
+     return $sm;
+  }
+
 
   public function addFooterLink($text = "", $href = "", $title = "")
   {
