@@ -59,7 +59,7 @@ require_once("gamedevru.php");
                      ."|./following-sibling::div"
                      ."|./following-sibling::table";
  $frm_sel_threadlink = "./div/a[1]|./div/b/a[1]";
- $frm_sel_threadlinkpages = "./div/a[position()>1]"; 
+ $frm_sel_threadlinkpages = "./div/a[contains(@href, 'page=')]"; 
  $frm_sel_replies = "./span"; // кол-во недавних ответов
  $frm_sel_lastreplylink = "./div/small/span/a";
  $frm_sel_author = "./div/small/span"; 
@@ -297,6 +297,8 @@ function GatherForum($xpath, $site)
   $xml=$xml->nextSibling;
 
   $tblcount = 0;
+  $underDaught = false;
+
   while ($xml!=null) {
    
     if ($xml->nodeName=="table")  {
@@ -326,6 +328,7 @@ function GatherForum($xpath, $site)
       $f->level=0;
       $f->isTitle=true;
       $f->link->text=$xml->textContent;
+      $underDaught = true;
     } else if ($xml->nodeName=="div") {
       $cls = $xml->getAttribute("class");
       if ($cls == "pages") { 
@@ -341,7 +344,7 @@ function GatherForum($xpath, $site)
       $x = $xpath->query($frm_sel_threadlink, $xml);
       if ($x->length>0) {
 
-        if (($x->length==1)) {
+        if (($x->length==1)||(!$underDaught)) {
           // "обычный форум" - тут всего одна ссылка
           $x = $x[0];
           $f->isComplex = (($x->parentNode!=null)&&($x->parentNode->nodeName=="b"));
