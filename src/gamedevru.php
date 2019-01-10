@@ -193,6 +193,24 @@ class Summary
   }
 }
 
+class UserInfo
+{
+  public $friendlink;
+  public $messagelink;
+  public $id;
+  
+  public function __construct() 
+  {
+    $friendlink = new ALink();  // добавить/удалить из друзей
+    $messagelink = new ALink();  // посмотреть "переписку"
+    $maillink = new ALink(); // почтовый адрес опицональный 
+  }
+
+  public function rebase()
+  {
+  }
+}
+
 class GameDev
 {
   public $mainlink;
@@ -217,9 +235,12 @@ class GameDev
   public $footerlinks = array();
   public $summaries = array();
   public $summaryText = "";
+  
+  public $userinfo;
 
   function __construct()
   {
+    $this->userinfo = new UserInfo();
     $this->mainlink = new ALink();
     $this->mainlink->text = "GameDev.ru";
     $this->mainlink->href = "http://gamedev.ru";
