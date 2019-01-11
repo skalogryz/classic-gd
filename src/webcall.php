@@ -133,7 +133,14 @@ function RemoveSlash($a)
   $xpath = new DOMXpath($doc);
   $gd = new GameDev();
   $gd->basepath = $basepath."/"; // this is used NOT to create a stand-alone host, but rather a directory in existing one
-  
+
+  $g_siteTitle = "";
+  $g_siteSlogan = "";
+  if (file_exists("config.php")) {
+    include("config.php");
+    if ($g_siteTitle!="") $gd->mainlink->text = $g_siteTitle;
+    if ($g_siteSlogan!="") $gd->slogan = $g_siteSlogan;
+  }
   GatherSite($xpath, $gd, $mode);
   $gd->rebase($basepath);
   OutputSite($gd, $mode);
