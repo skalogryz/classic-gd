@@ -243,7 +243,7 @@ function OutputForum2Default($frm, $even)
   else echo '<tr>';
 
   echo '<td>';
-  if ($frm->isnew) echo '<span class="red"><b>New!</b></span> ';
+  if ($frm->isnew) echo '<span class="red">New!</span> ';
 
   echo '<b>';
   $lstr = $frm->seclink->toHTML();
