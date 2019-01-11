@@ -211,7 +211,8 @@ function OutputForum2Daughter($frm, $even)
   else if ($even) echo '<tr class="sec">';
   else echo '<tr>';
 
-  echo '<td><b>'.$frm->link->toHTML().'</b>';
+  echo '<td>';
+  echo '<b>'.$frm->link->toHTML().'</b>';
 
   $cnt = 0;
   if (sizeof($frm->pages)>0) {
@@ -241,7 +242,10 @@ function OutputForum2Default($frm, $even)
   else if ($even) echo '<tr class="sec">';
   else echo '<tr>';
 
-  echo '<td><b>';
+  echo '<td>';
+  if ($frm->isnew) echo '<b>New!</b> ';
+
+  echo '<b>';
   $lstr = $frm->seclink->toHTML();
   if ($lstr!="") echo $lstr.": ";
 

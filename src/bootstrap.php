@@ -129,8 +129,10 @@ function GatherMessages($xpath, $site)
            $msg->datestr = substr($msg->datestr, 0, $i-1);
         }
         $i = strpos($msg->datestr,',');
-        $msg->timestr = substr($msg->datestr, $i+1);
-        $msg->datestr = substr($msg->datestr, 0, $i);
+        if (!($i===false)) {
+          $msg->timestr = substr($msg->datestr, $i+1);
+          $msg->datestr = substr($msg->datestr, 0, $i);
+        }
         $date[0]->parentNode->removeChild($date[0]);
         $msg->bodyhtml.=$xpath->document->saveHTML($body);
         break; // нашли дату - значит сообщение закончилось
@@ -357,7 +359,10 @@ function GatherForum($xpath, $site)
       }
 
       $x = $xpath->query($frm_sel_replies, $xml);
-      if ($x->length>0) $f->replies = $x[0]->textContent;
+      if ($x->length>0) {
+        $f->replies = $x[0]->textContent;
+        $f->isnew = !(strpos($x[0]->getAttribute('class'),"red")===false);
+      }
 
       $x = $xpath->query($frm_sel_author, $xml);
       if ($x->length>0) {

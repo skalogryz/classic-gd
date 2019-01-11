@@ -118,6 +118,7 @@ class Forum
   public $author = "";
   public $lastreplyname = "";
   public $pages = array();
+  public $isnew = false;
   function __construct()
   {
     $this->link = new ALink();
