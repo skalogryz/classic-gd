@@ -306,10 +306,16 @@ function editpasted(event)
   var str = event.clipboardData.getData("text/plain");
   var d = skif.domain;
   var trg = "https://gamedev.ru/";
-  while (str.indexOf(d)>=0) str = str.replace(d, trg);
-  if ((event.target)&&(event.target.setRangeText)) {
+  var any = false;
+  while (str.indexOf(d)>=0) {
+    any = true;
+    str = str.replace(d, trg);
+  }
+  if ((any)&&(event.target)&&(event.target.setRangeText)) {
     event.preventDefault();
-    event.target.setRangeText(str);
+    //var trg =  event.target;
+    //trg.setRangeText(str, trg.selectionStart, trg.selectionEnd, 'end');
+    document.execCommand('insertText', false, str);
   }
 }
 
